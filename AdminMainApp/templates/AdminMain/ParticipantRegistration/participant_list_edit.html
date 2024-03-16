@@ -1,0 +1,68 @@
+{% extends 'AdminMain/Festival.html' %}
+{% block content %}
+
+<div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <center><h3 class="card-title"><b>Participant Edit</b> </h3></center><br>
+                <form  method="post">
+                    {% csrf_token %}
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                            <th>Sl.No<br> &nbsp;</th>
+
+                            <th>Chest  <br>No</th>
+
+                            <th>Participant <br>Name</th>
+
+                            <th>College <br>Name</th>
+
+                            <th>Contact <br>Number</th>
+
+                            <th>Email <br>&nbsp;</th>
+
+                            <th>Referred<br>  By </th>
+
+                            <th>College ID  <br>Number</th>
+
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for i in data %}
+                       <tr>
+                             <td>{{forloop.counter}}</td>
+                             <td><input type="text" name="participant_chest_no" value="{{i.participant_chest_no}}" required readonly></td>
+                             <td><input type="text" name="participant_name" value="{{i.participant_name}}" required></td>
+                             <td><input type="text" name="college_name"  value="{{i.college_name}}" required></td>
+                             <td><input type="text" name="participant_phone"  value="{{i.participant_phone}}" required></td>
+                             <td><input type="email" name="participant_email" value="{{i.participant_email}}" required></td>
+                             <td><input type="text" name="reference_by"  value="{{i.reference_by}}" ></td>
+                             <td><input type="text" name="participant_id_no"  value="{{i.participant_id_card}}" required></td>
+                         </tr>
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                      <br><br>
+                        <center><button type="submit" class="btn btn-primary mr-2">Submit</button>
+                        <button type="button" class="btn btn-light mr-2" onclick="CancelButton()">Cancel</button></center><br><br>
+                  </div>
+                </form>
+                </div>
+              </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+<script>
+    function CancelButton(){
+ window.location.href = "{% url 'ViewParticipantRegistration' %}";
+}
+
+</script>
+
+{% endblock %}

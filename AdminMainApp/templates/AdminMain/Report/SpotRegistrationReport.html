@@ -1,0 +1,229 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+     <style>
+        .button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.left-content {
+    flex: 1;
+}
+
+.right-content {
+    display: flex;
+    align-items: center;
+}
+@media print {
+            /* Hide elements with class 'hide-on-print' */
+            .hide-on-print {
+                display: none !important;
+            }
+            @page {
+        margin: 0;
+        size: auto;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    header,
+    footer {
+        display: none;
+    }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="text-center">
+        <img src="static/images/logo.png" alt="Example Logo" class="mt-3" />
+    </div>
+
+    <br>
+
+    <h1 class="text-center">Spot Registration Report</h1>
+    <br>
+
+    <div class="button-container">
+    <div class="left-content">
+        &nbsp;<label><b>Date: {% now "d-m-Y" %}</b></label>
+    </div>
+    <div class="right-content">
+        <button id="printButton" class="btn btn-primary hide-on-print" style="height:35px">Print</button>&nbsp;&nbsp;
+        <button id="exportButton" class="btn btn-primary hide-on-print" style="height:35px">Excel</button>&nbsp;
+    </div>
+</div>
+    <br>
+    <br>
+    <div class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <p class="card-description">
+                &nbsp;
+            </p>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label"><b>Festival</b></label>
+                        <div class="col-sm-8">
+                            <select id="festivalSelect" class="form-control" onchange="update_festival(this.value)" required style="color:black;">
+                                <option value="{{ data.FestivalId }}">Select Festival &nbsp;{{ data.Festival }}</option>
+                                {% for festival_item in festival %}
+                                    <option value="{{ festival_item.id }}" style="color:black;">{{ festival_item.festival_name }}</option>
+                                {% endfor %}
+                                <option value="{{ data.FestivalId }}">{{ data.Festival }}</option>
+                            </select>
+                            <input type="hidden" id="FestivalID" name="festival_master_header_id">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                          <div class="form-group row">
+                              <label class="col-sm-4 col-form-label"><b>Event</b> </label>
+                              <div class="col-sm-8">
+                                  <select id="EventMaster" class="form-control"onchange="update_event(this.value)" required style="color:black;">
+                                      <option value="">Select Event </option>
+                                      <option value="{{data.EventMasterId}}" selected>{{data.EventName}}</option>
+                                  </select>
+                                  <input type="hidden" id="EventMasterID" value="{{data.EventMasterId}}" name="event_master_id">
+                              </div>
+                          </div>
+                      </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <table class="table table-hover table-bordered" id="college">
+        <thead>
+            <td><b>Sl.No</b></td>
+            <td><b>Event</b></td>
+            <td><b>Team Leader</b></td>
+            <td><b>Chest Number</b></td>
+            <td><b>Amount</b></td>
+        </thead>
+        <tbody>
+        <tr>
+
+        </tr>
+        </tbody>
+    </table>
+
+    <br>
+
+    <div class="text-end">
+        <form>
+            <label for="fname"><b>Total: </b></label>
+            <input type="text" id="TotalCount" name="fname"><br><br>
+        </form>
+    </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script>
+$(document).ready(function() {
+
+         $('#festivalSelect').change(function() {
+        var festivalId = $(this).val();
+        $.ajax({
+            url: '/get_event_names/',
+            method: 'GET',
+            data: { festival_id: festivalId },  // Fix: Use festivalId instead of selectedFestivalId
+            success: function(response) {
+            console.log('Response from server:', response);
+                    $('#EventMaster').empty(); // Clear previous options
+                    $('#EventMaster').append('<option value="">Select Event Category</option>');
+                    $.each(response, function(index, unique_events) {
+                        $('#EventMaster').append('<option value="' + unique_events.id + '">' + unique_events.event_name + '</option>');
+                    });
+            },
+            error: function(error) {
+                console.error(error);
+            }
+        });
+        });
+
+        // Rest of your JavaScript for handling Event selection
+    });
+
+    $('#EventMaster').change(function() {
+    var spotregistrationId = $(this).val();
+    var FestivalId = document.getElementById('FestivalID').value;
+    var EventId = document.getElementById('EventMasterID').value;
+
+    // AJAX call to fetch Event Categories based on selected Festival ID
+    $.ajax({
+        url: '/spot_registration_report/',
+        method: 'GET',
+        data: {festival_id: FestivalId, eventId: EventId},
+        success: function(response) {
+            console.log('Response from server:', response);
+            $('table tbody').empty(); // Clear previous data
+
+             var totalCount = response.spotregistration.length;
+
+            // Loop through each participant in the response and append a new row to the table
+            $.each(response.spotregistration, function(index, spotregistration) {
+                var newRow = '<tr>' +
+                    '<td>' + (index + 1) + '</td>' +
+                    '<td>' + spotregistration.Event_name + '</td>' +
+                    '<td>' + spotregistration.Team_Leader + '</td>' +
+                    '<td>' + spotregistration.Chest_no + '</td>' +
+                    '<td>' + spotregistration.Amount + '</td>' +
+                     '<tr>';
+
+                $('table tbody').append(newRow);
+            });
+                $('#TotalCount').val(totalCount);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+});
+
+
+function update_event(id){
+        document.getElementById('EventMasterID').value = id;
+}
+
+
+function update_festival(id){
+        document.getElementById('FestivalID').value = id;
+}
+function s2ab(s) {
+    var buf = new ArrayBuffer(s.length);
+    var view = new Uint8Array(buf);
+    for (var i = 0; i < s.length; i++) {
+        view[i] = s.charCodeAt(i) & 0xFF;
+    }
+    return buf;
+}
+
+function exportToExcel() {
+    var table = document.getElementById('college');
+    var ws = XLSX.utils.table_to_sheet(table);
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    var blob = new Blob([s2ab(XLSX.write(wb, { bookType: 'xlsx', type: 'binary' }))], { type: 'application/octet-stream' });
+    saveAs(blob, 'participants.xlsx');
+}
+$('#exportButton').on('click', function() {
+    exportToExcel();
+});
+
+document.getElementById('printButton').addEventListener('click', function() {
+        window.print();
+    });
+</script>
+</body>
+</html>

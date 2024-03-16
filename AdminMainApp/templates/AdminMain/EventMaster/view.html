@@ -1,0 +1,108 @@
+{% extends 'AdminMain/Festival.html' %}
+{% block content %}
+<style>
+    .fullscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+    }
+
+    .fullscreen-img {
+        cursor: pointer;
+    }
+</style>
+
+<div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Add Event </h4>
+                  <a href="../CreateEventMaster"><img src="https://cdn-icons-png.flaticon.com/512/1665/1665578.png" width="35vh;" height="35vh;"></a>
+
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                            <th>Sl.No<br> &nbsp;</th>
+
+                            <th>Event<br>Name</th>
+
+                            <th>Event<br>Document</th>
+
+                            <th>Festival <br> &nbsp;</th>
+
+                            <th>Event <br>Category</th>
+
+                            <th>Participant <br>Category</th>
+
+<!--                            <th>Event<br>Type</th>-->
+
+                            <th>Registartion <br>Fee</th>
+
+                            <th>Min Team<br> Size </th>
+
+                            <th>Max Team <br>Size</th>
+
+                            <th>Max Registration<br>&nbsp;</th>
+
+                            <th>Abbreviation<br>&nbsp;</th>
+
+                            <th>Event <br> Description</th>
+
+                            <th>Video <br>&nbsp;</th>
+
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for i in data %}
+                        <tr>
+                            <td style=" text-align: right;"> {{ forloop.counter }}</td>
+                            <td>{{i.EventName}}</td>
+                            <td><img src="media/{{i.EventDocument}}" class="fullscreen-img"></td>
+                            <td>{{i.Festival}}</td>
+                            <td>{{i.EventCatgory}}</td>
+                            <td>{{i.Participant}}</td>
+<!--                            <td>{{i.EventType}}</td>-->
+                            <td style=" text-align: right;">{{i.RegistrationFee}}</td>
+                            <td style=" text-align: right;">{{i.MinTeamSize}}</td>
+                            <td style=" text-align: right;">{{i.MaxTeamSize}}</td>
+                            <td style=" text-align: right;">{{i.MaxRegistration}}</td>
+                            <td>{{i.Abbreviation}}</td>
+                            <td><textarea style=" height: 80px;">{{i.EventDescription}}</textarea></td>
+                            <td>
+                                <video width="200" height="150" controls>
+                                    <source src="media/{{ i.VideoFile }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </td>
+                            <td><a href="../EditEventMaster/{{i.id}}"><label class="badge badge-primary" style="cursor: pointer;">Edit</label></a></td>
+                            <td><a href="../DeleteEventMaster/{{i.id}}"><label class="badge badge-danger" style="cursor: pointer;">Delete</label></a></td>
+                            <td></td>
+                        </tr>
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+</div>
+
+<script>
+   document.addEventListener('DOMContentLoaded', function () {
+    console.log('DOM loaded'); // Check if this message appears in the console
+    const fullscreenImages = document.querySelectorAll('.fullscreen-img');
+
+    fullscreenImages.forEach(function (img) {
+        img.addEventListener('click', function () {
+            console.log('Image clicked'); // Check if this message appears in the console
+            img.classList.toggle('fullscreen');
+        });
+    });
+});
+
+</script>
+
+{% endblock %}

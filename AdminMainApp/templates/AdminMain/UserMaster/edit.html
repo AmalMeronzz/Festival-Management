@@ -1,0 +1,48 @@
+{% extends 'AdminMain/Festival.html' %}
+{% block content %}
+<div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Edit User Master</h4>
+                 <form class="forms-sample" method="post" >
+                     {% csrf_token %}
+<!--                      <div class="form-group">-->
+<!--                        <div class="input-group">-->
+<!--                            <div class="input-group-prepend">-->
+<!--                                <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">User type</button>-->
+<!--                                <div class="dropdown-menu">-->
+<!--                                    {% for i in UserType %}-->
+<!--                <a class="dropdown-item" href="#" onclick="updateInput('{{i.id}}', '{{i.usertype}}')">{{i.usertype}}</a>-->
+<!--                                    {% endfor %}-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <input type="text" class="form-control" aria-label="Text input with dropdown button" id="selectedValue" readonly>-->
+<!--                             <input type="text" id="UserTypeID" hidden name="user_type_id">-->
+<!--                        </div>-->
+<!--                      </div>-->
+                      <div class="form-group">
+                      <label for="exampleInputUsername1">Login Name</label>
+                      <input type="text" class="form-control" name="name" value="{{data.login_id}}" id="exampleInputUsername1" placeholder="login name" required>
+
+                      </div>
+                      <div class="form-group">
+                      <label for="exampleInputUsername1">Login Password</label>
+                      <input type="password" class="form-control" value="{{data.login_password}}" name="password" id="exampleInputUsername2" placeholder="password" required>
+                      </div>
+                     <br>
+                      <center><button type="submit" class="btn btn-primary mr-2">Submit</button>
+                      <button type="button" class="btn btn-light" id="redirectButton">Cancel</button></center>
+
+                      </form>
+                </div>
+              </div>
+</div>
+
+<script>
+document.getElementById("redirectButton").onclick = function() {
+    window.location.href = "{% url 'CreateUserMaster' %}";
+}
+</script>
+
+
+{% endblock %}

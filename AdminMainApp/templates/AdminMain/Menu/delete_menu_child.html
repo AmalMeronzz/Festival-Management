@@ -1,0 +1,15 @@
+{% extends 'AdminMain/Festival.html' %}
+{% block content %}
+<div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Are you sure want to delete</h4>
+
+                    <a href="../DeleteMenuChild1/{{data}}"><button type="submit" class="btn btn-primary mr-2">Yes</button></a>
+
+                    <a href="../ViewMenuHeader"><button class="btn btn-light" id="CancleBtn">No</button></a>
+
+                </div>
+              </div>
+</div>
+{% endblock %}

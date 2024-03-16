@@ -1,0 +1,374 @@
+{% extends 'AdminMain/Festival.html' %}
+{% block content %}
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 90%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: white; /* Fallback color */
+  background-color: white; /* Black w/ opacity */
+}
+
+/* Modal Content */
+#modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  left:100px;
+  padding: 0;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+
+#modal-body {padding: 2px 16px;}
+.modal-footer {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+</style>
+
+<div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Add User Master</h4>
+                    <a href="../CreateUserMaster1"><img src="https://cdn-icons-png.flaticon.com/512/1665/1665578.png" width="35vh;" height="35vh;"></a>
+                  <br>
+                    <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>
+                            User type
+                          </th>
+                          <th>
+                             View Users
+                          </th>
+                          <th>
+                          </th>
+                            <th></th>
+
+                        </tr>
+                      </thead>
+                      <tbody>
+                       {% for i in data %}
+                        <tr>
+                          <td>
+                           {{ i.usertype }}
+                          </td>
+                          <td>
+                           <a href="../ViewUserMaster/{{i.id}}"><label class="badge badge-primary">View</label></a>
+                          </td>
+                          <td>
+                          </td>
+<!--                            <td>-->
+<!--                             <button onclick="mybtnclick()">button</button>-->
+<!--                          </td>-->
+                        </tr>
+                       {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+</div>
+<!--<div id="myModal" class="modal">-->
+
+<!--   Modal content-->
+<!--  <div class="modal-content">-->
+<!--    <div class="modal-header">-->
+<!--      <span class="close">&times;</span>-->
+<!--      <h2>Modal Header</h2>-->
+<!--    </div>-->
+<!--    <div class="modal-body">-->
+<!--      <p>Some text in the Modal Body</p>-->
+<!--      <p>Some other text...</p>-->
+<!--    </div>-->
+<!--    <div class="modal-footer">-->
+<!--      <h3>Modal Footer</h3>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+<div id="myModal" class="modal">
+<div class="col-md-6 grid-margin stretch-card">
+              <div class="card" id="modal-content" style="margin-left:40vh;">
+                <div class="card-body" id="modal-body">
+                  <h4 class="card-title">ADD USER MASTER</h4>
+                  <form class="forms-sample" method="post" action="../CreateUserMaster">
+                     {% csrf_token %}
+                      <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">User type &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                <div class="dropdown-menu">
+                                    {% for i in data %}
+                                    <a class="dropdown-item" href="#" onclick="updateInput('{{i.id}}', '{{i.usertype}}')">{{i.usertype}}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <input type="text" class="form-control" aria-label="Text input with dropdown button" id="selectedValue" readonly>
+                             <input type="text" id="UserTypeID" hidden name="user_type_id">
+                        </div>
+                      </div>
+                      <div class="form-group FestivalHidden" hidden>
+<!--                      <div class="form-group" >-->
+<!--                        <div class="input-group" >-->
+<!--                            <div class="input-group-prepend">-->
+<!--                                <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select festival&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>-->
+<!--                                <div class="dropdown-menu" onchange="fetchEventCategories(this)">-->
+<!--                                    {% for i in Festival %}-->
+<!--                                    <a class="dropdown-item" href="#" onclick="UpdateFestival('{{i.id}}', '{{i.festival_name}}')">{{i.festival_name}}</a>-->
+<!--                                    {% endfor %}-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <input type="text" class="form-control" aria-label="Text input with dropdown button" id="FestivalValue" readonly>-->
+<!--                             <input type="text" id="FestivalID" hidden name="user_type_id">-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="form-group" >-->
+<!--                        <div class="input-group">-->
+<!--                            <div class="input-group-prepend">-->
+<!--                                <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Committe Member</button>-->
+<!--                                <div class="dropdown-menu">-->
+<!--                                    <a class="dropdown-item" href="#" onclick="UpdateMember()('{{i.id}}', '{{i.festival_name}}')">{{i.festival_name}}</a>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <input type="text" class="form-control" aria-label="Text input with dropdown button" id="FestivalValue" readonly>-->
+<!--                             <input type="text" id="MemberId" hidden name="user_type_id">-->
+<!--                        </div>-->
+<!--                      </div>-->
+                          <div class="form-group">
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select festival&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+            <div class="dropdown-menu" id="festivalDropdown">
+                {% for i in Festival %}
+                <a class="dropdown-item" href="#" onclick="UpdateFestival('{{i.id}}', '{{i.festival_name}}')">{{i.festival_name}}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <input type="text" class="form-control" aria-label="Text input with dropdown button" id="FestivalValue" readonly>
+        <input type="text" id="FestivalID" hidden name="user_type_id">
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Committee Member</button>
+            <div class="dropdown-menu" id="committeeDropdown">
+                <!-- Committee member options will be loaded here -->
+            </div>
+        </div>
+        <input type="text" class="form-control" aria-label="Text input with dropdown button" id="MemberValue" readonly>
+        <input type="text" id="MemberId" hidden name="user_type_id">
+    </div>
+</div>
+
+                      </div>
+                      <div class="form-group">
+                      <label for="exampleInputUsername1">Login Name</label>
+                      <input type="text" class="form-control" name="name" id="exampleInputUsername1" placeholder="login name" required>
+
+                      </div>
+                      <div class="form-group">
+                      <label for="exampleInputUsername1">Login Password</label>
+                      <input type="password" class="form-control" name="password" id="exampleInputUsername1" placeholder="password" required>
+                      </div>
+                      <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                      </form>
+                      <button class="btn btn-light" id="redirectButton">Cancel</button>
+                </div>
+              </div>
+</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+
+function updateInput(id, userType) {
+    document.getElementById('selectedValue').value = `${userType}`;
+    document.getElementById('UserTypeID').value = `${id}`;
+
+    var UserTypeId = document.getElementById('UserTypeID').value; // Get the value
+
+    var HiddenFestival = document.querySelector('.FestivalHidden');
+
+    if (UserTypeId == '13'){ // Show the hidden class for Group
+     HiddenFestival.removeAttribute('hidden');
+
+    } else { // Hide the hidden class for Single or other options
+      HiddenFestival.setAttribute('hidden', 'hidden');
+    }
+
+}
+
+function UpdateFestival(id, festival) {
+    document.getElementById('FestivalValue').value = `${festival}`;
+    document.getElementById('FestivalID').value = `${id}`;
+}
+
+<!--$('#festivalSelect').change(function() {-->
+<!--            var FestivalID = $(this).val();-->
+
+<!--            // AJAX call to fetch Event Categories based on selected Festival ID-->
+<!--            $.ajax({-->
+<!--                url: '/get_committe_member/',  // Replace with your URL for fetching event categories-->
+<!--                method: 'GET',-->
+<!--                data: { festival_id: FestivalID },-->
+<!--                success: function(response) {-->
+<!--                 console.log('Response from server:', response);-->
+<!--                    $('#participantSelect').empty(); // Clear previous options-->
+<!--                    $('#participantSelect').append('<option value="">Select participant Category</option>');-->
+<!--                    $.each(response, function(index, category) {-->
+<!--                        $('#participantSelect').append('<option value="' + category.participant_category_id + '">' + category.participant_category_id__participant_category_name + '</option>');-->
+<!--                    });-->
+<!--                },-->
+<!--                error: function(error) {-->
+<!--                    console.log(error);-->
+<!--                }-->
+<!--            });-->
+<!--});-->
+
+<!--$('#festivalSelect').change(function() {-->
+<!--    var FestivalID = $(this).val();-->
+
+<!--    // AJAX call to fetch Event Categories based on selected Festival ID-->
+<!--    $.ajax({-->
+<!--        url: '/get_committe_member/', // Replace with your URL for fetching event categories-->
+<!--        method: 'GET',-->
+<!--        data: { festival_id: FestivalID },-->
+<!--        success: function(response) {-->
+<!--            console.log('Response from server:', response);-->
+<!--            $('#participantSelect').empty(); // Clear previous options-->
+<!--            $('#participantSelect').append('<option value="">Select participant Category</option>');-->
+
+<!--            response.forEach(function(category) {-->
+<!--                $('#participantSelect').append('<option value="' + category.participant_category_id + '">' + category.participant_category_name + '</option>');-->
+<!--            });-->
+<!--        },-->
+<!--        error: function(error) {-->
+<!--            console.log(error);-->
+<!--        }-->
+<!--    });-->
+<!--});-->
+
+$('#festivalDropdown a').click(function() {
+    var FestivalID = $(this).attr('data-id');
+    var FestivalName = $(this).attr('data-name');
+    $('#FestivalID').val(FestivalID);
+    $('#FestivalValue').val(FestivalName);
+
+    // AJAX call to fetch committee members based on selected festival
+    $.ajax({
+        url: '/get_committe_member/',
+        method: 'GET',
+        data: { festival_id: FestivalID },
+        success: function(response) {
+            console.log('Committee members:', response);
+            $('#committeeDropdown').empty(); // Clear previous options
+            response.forEach(function(member) {
+                $('#committeeDropdown').append('<a class="dropdown-item" href="#" onclick="UpdateMember(' + member.id + ', \'' + member.committe_member_name + '\')">' + member.committe_member_name + '</a>');
+            });
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+});
+
+
+
+document.getElementById("redirectButton").onclick = function() {
+    window.location.href = "{% url 'CreateUserMaster' %}";
+}
+
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+<!--span.onclick = function() {-->
+<!--  modal.style.display = "none";-->
+<!--}-->
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+ // Check for the success message and trigger SweetAlert
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                swal("Success", "{{ message }}", "success");
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+<!--function mybtnclick() {-->
+<!--    Swal.fire(-->
+<!--        'Basic alert',-->
+<!--        'You clicked the button!'-->
+<!--    )-->
+<!--};-->
+</script>
+{% endblock %}

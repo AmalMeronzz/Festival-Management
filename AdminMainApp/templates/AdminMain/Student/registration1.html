@@ -1,0 +1,486 @@
+{% load static %}
+<html class="no-js" lang="zxx">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>EventCon</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <link rel="manifest" href="site.webmanifest"> -->
+    <link rel="shortcut icon" type="image/x-icon" href="../static/student/img/favicon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="../static/student/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/student/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../static/student/css/magnific-popup.css">
+    <link rel="stylesheet" href="../static/student/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../static/student/css/themify-icons.css">
+    <link rel="stylesheet" href="../static/student/css/gijgo.css">
+    <link rel="stylesheet" href="../static/student/css/nice-select.css">
+    <link rel="stylesheet" href="../static/student/css/animate.css">
+    <link rel="stylesheet" href="../static/student/css/flaticon.css">
+    <link rel="stylesheet" href="../static/student/css/slicknav.css">
+
+    <link rel="stylesheet" href="../static/student/css/style.css">
+    <!-- <link rel="stylesheet" href="css/responsive.css"> -->
+    <style>
+    .single_brand {
+        margin-right: 20px; /* Adjust this value as needed for the desired space */
+    }
+
+   .brand_active.owl-carousel .owl-stage {
+    display: flex;
+    justify-content: flex-start;
+    transition: transform 0.5s ease;
+}
+
+.single_brand {
+    margin-right: 10px; /* Adjust as needed */
+}
+</style>
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
+
+    <!-- header-start -->
+    <header>
+        <div class="header-area ">
+            <div id="sticky-header" class="main-header-area">
+                <div class="container">
+                    <div class="header_bottom_border">
+                        <div class="row align-items-center">
+                            <div class="col-xl-3 col-lg-3">
+                                <div class="logo">
+                                    <a href="../StudentHome">
+                                        <img src="../static/student/img/gallery/aplicationlogo.png" height="55vh;" width="180vh;" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6">
+                                <div class="main-menu  d-none d-lg-block">
+                                    <nav>
+                                        <ul id="navigation">
+<!--                                            <li><a href="../StudentHome">home</a></li>-->
+<!--                                            <li><a href="../Student/StudentRegistration">registration</a></li>-->
+<!--                                            <li><a href="../login">login</a></li>-->
+<!--                                            <li><a href="#">pages <i class="ti-angle-down"></i></a>-->
+<!--                                                <ul class="submenu">-->
+<!--                                                    <li><a href="about.html">about</a></li>-->
+<!--                                                    <li><a href="Program.html">Program</a></li>-->
+<!--                                                    <li><a href="Venue.html">Venue</a></li>-->
+<!--                                                    <li><a href="elements.html">elements</a></li>-->
+<!--                                                </ul>-->
+<!--                                            </li>-->
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mobile_menu d-block d-lg-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- header-end -->
+
+ <div class="performar_area black_bg">
+        <div class="container">
+            <div class="col-12 grid-margin" >
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">{{event_name}} REGISTRATION</h4>
+                  <form class="form-sample" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <p class="card-description">
+                      &nbsp;
+                    </p>
+                    <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group row">
+                               <label class="col-sm-4 col-form-label"><b style="color:black;">College Name & Place</b></label>
+                               <div class="col-sm-8">
+                                   <input type="text" id="college_name" name="college_name" class="form-control" required/>
+                               </div>
+                           </div>
+                       </div>
+                        <div class="col-md-6">
+                           <div class="form-group row">
+                               <label class="col-sm-4 col-form-label"><b style="color:black;">Referred By</b></label>
+                               <div class="col-sm-8">
+                                   <input type="text" id="reference" placeholder="Full Name" name="reference_by" class="form-control" />
+                               </div>
+                           </div>
+                       </div>
+                    </div>
+                      <div class="row group-details">
+                          <div class="col-lg-12 grid-margin stretch-card">
+                              <div class="card">
+                                <div class="card-body">
+                                  <div class="table-responsive pt-3">
+                                    <table class="table table-bordered">
+                                      <thead>
+                                        <tr>
+                                            <th>
+                                            #
+                                            </th>
+                                            <th>
+                                            Participant Type
+                                            </th>
+                                            <th>
+                                                 Name
+                                            </th>
+                                            <th>
+                                                Phone
+                                            </th>
+                                            <th>
+                                                Email
+                                            </th>
+                                            <th>
+                                                College ID Number
+                                            </th>
+                                            <th>
+                                                ID/Document
+                                            </th>
+                                        </tr>
+                                      </thead>
+                                      <tbody  id="tableBody">
+                                        <tr>
+<!--                                            <td>-->
+<!--                                            1-->
+<!--                                            </td>-->
+<!--                                            <td>-->
+<!--                                                team leader-->
+<!--                                            </td>-->
+<!--                                            <td>-->
+<!--                                                 <input type="text" required>-->
+<!--                                            </td>-->
+<!--                                            <td>-->
+<!--                                               <input type="text" required>-->
+<!--                                            </td>-->
+<!--                                            <td>-->
+<!--                                                <input type="number" required>-->
+<!--                                            </td>-->
+<!--                                            <td>-->
+<!--                                                 <input type="file" required>-->
+<!--                                            </td>-->
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+                      <img   onclick="addNewRow()" src="https://cdn-icons-png.flaticon.com/512/1665/1665578.png" width="35vh;" height="35vh;" style="margin-left:30px;">
+                      <h5 style="margin-left:18px;">add row</h5>
+                     <center><button type="submit" class="btn btn-primary mr-2">Submit</button>
+                         <button type="button" class="btn btn-light mr-2" onclick="ViewCommitte()">Cancel</button></center>
+                  </form>
+                </div>
+                 <div style="margin-left:10px;">
+                     <h3>Guidelines </h3>
+                    <div class="col-lg-12 col-lg-6 col-md-8">
+                        <textarea class="form-control" rows="5" style="color: black;" readonly>{{ event_description }}</textarea>
+                    </div>
+
+                 </div>
+
+              </div>
+            </div>
+        </div>
+ </div>
+
+
+<!--   &lt;!&ndash; brand_area_start  &ndash;&gt;-->
+<!--    <div class="brand_area black_bg">-->
+<!--        <div class="container">-->
+<!--            <div class="row">-->
+<!--                <div class="col-lg-12">-->
+<!--                    <div class="section_title text-center mb-80">-->
+<!--                        <h4 class="wow fadeInRight" data-wow-duration="1s" data-wow-delay=".3s">Sponsor Logoss</h4>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            -->
+<!--            <div class="row">-->
+<!--                <div class="col-lg-12">-->
+<!--                    <div class="brand_wrap">-->
+
+<!--                        <div class="brand_active owl-carousel owl-loaded owl-drag">-->
+<!--                             {% for i in sponsor %}-->
+<!--                            <div class="single_brand text-center">-->
+
+<!--                                <img src="/media/{{ i.sponsor_logo }}" style="width: 150px; height: 120px;" alt="">-->
+<!--                                <h3 style="color:white;">{{ i.sponsor_name }}</h3>-->
+
+<!--                            </div>-->
+<!--                           {% endfor %}-->
+<!--                        </div>-->
+
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            -->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--     <div class="brand_area black_bg">-->
+<!--        <div class="container">-->
+<!--            <div class="row">-->
+<!--                <div class="col-lg-12">-->
+<!--                    <div class="section_title text-center mb-80">-->
+<!--                        <h4 class="wow fadeInRight" data-wow-duration="1s" data-wow-delay=".3s">Sponsors</h4>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="row">-->
+<!--                <div class="col-lg-12">-->
+<!--                    <div class="brand_wrap">-->
+<!--                        <div class="brand_active owl-carousel" style="display:block;">-->
+<!--                             {% for i in sponsor %}-->
+<!--                            <div class="single_brand text-center">-->
+<!--                                <center>-->
+<!--                                <img src="/media/{{ i.sponsor_logo }}" style="width: 150px; height: 120px;" alt="">-->
+<!--                                    <br><br>-->
+<!--                                <h3 style="color:white;">{{ i.sponsor_name }}</h3>-->
+<!--                                    </center>-->
+<!--                            </div>-->
+<!--                           {% endfor %}-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <div class="brand_area black_bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section_title text-center mb-80">
+                    <h4 class="wow fadeInRight" data-wow-duration="1s" data-wow-delay=".3s">Sponsors</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="brand_wrap">
+                    <div class="brand_active owl-carousel" style="display:flex; justify-content: center;">
+                        {% for i in sponsor %}
+                        <div class="single_brand text-center">
+                            <center>
+                                <img src="/media/{{ i.sponsor_logo }}" style="width: 150px; height: 120px;" alt="">
+                                <br><br>
+                                <h3 style="color:white;">{{ i.sponsor_name }}</h3>
+                            </center>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- brand_area_end  -->
+
+    <!-- footer_start  -->
+    <footer class="footer">
+        <div class="footer_top">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="footer_widget">
+                            <div class="address_details text-center">
+<!--                                <p class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".5s">The event regularly attracts a diverse range of attendees from around the world.</p>-->
+<!--                                <a href="#" class="boxed-btn3 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".6s">Buy Ticket</a>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--        <div class="copy-right_text">-->
+<!--            <div class="container">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-xl-12">-->
+<!--                        <p class="copy_right text-center wow fadeInDown" data-wow-duration="1s" data-wow-delay=".5s">-->
+<!--                            &lt;!&ndash; Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. &ndash;&gt;-->
+<!--Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>-->
+<!--&lt;!&ndash; Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. &ndash;&gt;-->
+<!--                        </p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+    </footer>
+    <!-- footer_end  -->
+
+    <!-- JS here -->
+
+    <script>
+        $(document).ready(function(){
+    $('.brand_active.owl-carousel').owlCarousel({
+        items: 4,
+        loop: true,
+        margin: 10,
+        autoplay: true,
+        autoplayTimeout: 3000,
+        autoplayHoverPause: true
+    });
+});
+    </script>
+    <script src="../static/student/js/vendor/modernizr-3.5.0.min.js"></script>
+    <script src="../static/student/js/vendor/jquery-1.12.4.min.js"></script>
+    <script src="../static/student/js/popper.min.js"></script>
+    <script src="../static/student/js/bootstrap.min.js"></script>
+    <script src="../static/student/js/owl.carousel.min.js"></script>
+    <script src="../static/student/js/isotope.pkgd.min.js"></script>
+    <script src="../static/student/js/ajax-form.js"></script>
+    <script src="../static/student/js/waypoints.min.js"></script>
+    <script src="../static/student/js/jquery.counterup.min.js"></script>
+    <script src="../static/student/js/imagesloaded.pkgd.min.js"></script>
+    <script src="../static/student/js/scrollIt.js"></script>
+    <script src="../static/student/js/jquery.scrollUp.min.js"></script>
+    <script src="../static/student/js/wow.min.js"></script>
+    <script src="../static/student/js/gijgo.min.js"></script>
+    <script src="../static/student/js/nice-select.min.js"></script>
+    <script src="../static/student/js/jquery.slicknav.min.js"></script>
+    <script src="../static/student/js/jquery.magnific-popup.min.js"></script>
+    <script src="../static/student/js/tilt.jquery.js"></script>
+    <script src="../static/student/js/plugins.js"></script>
+
+
+
+    <!--contact js-->
+    <script src="../static/student/js/contact.js"></script>
+    <script src="../static/student/js/jquery.ajaxchimp.min.js"></script>
+    <script src="../static/student/js/jquery.form.js"></script>
+    <script src="../static/student/js/jquery.validate.min.js"></script>
+    <script src="../static/student/js/mail-script.js"></script>
+
+
+    <script src="../static/student/js/main.js"></script>
+
+    <script src="../static/student/js/wow.min.js"></script>
+    <script>
+        new WOW().init();
+    </script>
+<!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+
+<script>
+$(document).ready(function() {
+         var minTeamSize = {{ min_team_size }}; // Access min_team_size from the context
+         generateGroupDetailsRows(minTeamSize);
+
+        // Rest of your JavaScript for handling Event selection
+});
+
+function ViewCommitte(){
+ window.location.href = "{% url 'StudentHome' %}";
+}
+
+
+function generateGroupDetailsRows(minTeamSize) {
+    var tableBody = $('.table tbody');
+    tableBody.empty(); // Clear existing rows
+
+    for (var i = 1; i <= minTeamSize; i++) {
+        var role = i === 1 ? 'Team Leader' : 'Team Member';
+        var newRow = `
+            <tr>
+                <td>${i}</td>
+                <td><input type=text name="participant_type" value="${role}" readonly></td>
+                <td><input type="text" name="participant_name" required></td>
+                <td><input type="text" name="participant_phone" pattern="[6-9]{1}[0-9]{9}" required></td>
+                <td><input type="email" name="participant_email" required></td>
+                <td><input type="text" name="participant_id_no" required></td>
+                <td><input type="file" name="participant_id_image" required></td>
+            </tr>
+        `;
+        tableBody.append(newRow);
+    }
+}
+
+function generateGroupDetailsRows(minTeamSize) {
+    var tableBody = $('.table tbody');
+    tableBody.empty(); // Clear existing rows
+
+    for (var i = 1; i <= minTeamSize; i++) {
+    var role = i === 1 ? 'Team leader' : 'Team member';
+        var newRow = `
+            <tr>
+                <td>${i}</td>
+                <td><input type=text name="participant_type" value="${role}" readonly></td>
+                <td><input type="text" name="participant_name" required></td>
+                <td><input type="number" name="participant_phone" required></td>
+                <td><input type="email" name="participant_email" required></td>
+                <td><input type="text"  name="participant_id_no" required></td>
+                <td><input type="file"  name="participant_id_image" required></td>
+            </tr>
+        `;
+        tableBody.append(newRow);
+    }
+}
+
+
+function addNewRow() {
+    var tableBody = $('.table tbody');
+
+    var maxTeamSize = {{ max_team_size }};
+    var rowCount = tableBody.children('tr').length;
+
+    if (!isNaN(maxTeamSize) && rowCount < maxTeamSize) {
+        rowCount++; // Calculate the new row number
+
+        var newRow = `
+            <tr>
+                <td>${rowCount}</td>
+                <td><input type="text" name="participant_type" value="Team member" readonly></td>
+                <td><input type="text" name="participant_name" required></td>
+                <td><input type="number" name="participant_phone" required></td>
+                <td><input type="email" name="participant_email" required></td>
+                <td><input type="text" name="participant_id_no" required></td>
+                <td><input type="file" name="participant_id_image" required></td>
+                <td><button class="btn" onclick="removeRow(this)">X</button></td>
+            </tr>
+        `;
+
+        tableBody.append(newRow);
+
+        // Update the value in maxTeamSizeInput
+        //maxTeamSizeInput.val(rowCount);
+    } else {
+        alert('Maximum team size reached.');
+    }
+}
+
+
+
+function removeRow(button) {
+    var row = $(button).closest('tr');
+    row.remove();
+    updateRowNumbers(); // Update row numbers after removal
+}
+
+function updateRowNumbers() {
+    var tableRows = $('.table tbody tr');
+    tableRows.each(function(index) {
+        $(this).find('td:first').text(index + 1);
+    });
+}
+
+</script>
+
+</body>
+
+</html>

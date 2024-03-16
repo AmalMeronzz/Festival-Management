@@ -1,0 +1,94 @@
+{% extends 'AdminMain/Festival.html' %}
+{% block content %}
+<style>
+    #table_head{
+    text-align:center;
+    }
+    #tbody_content
+</style>
+
+<div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Add Spot Registration</h4>
+                    <a href="../CreateParticipantRegistartion"><img src="https://cdn-icons-png.flaticon.com/512/1665/1665578.png" width="35vh;" height="35vh;"></a>
+
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-3">-->
+<!--                          <a href="../CreateParticipantRegistartion"><img src="https://cdn-icons-png.flaticon.com/512/1665/1665578.png" width="35vh;" height="35vh;"></a>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-3">-->
+<!--                                  <select id="yearselect" class="form-control" required style="color:black;" style="align-items:center;">-->
+<!--                                      <option value="">Select  &nbsp;</option>-->
+<!--                                      <option value="2024" style="color:black;">Reported</option>-->
+<!--                                      <option value="2025" style="color:black;">Not Reported</option>-->
+<!--                                  </select>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <br>-->
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr id="table_head">
+                            <th>Sl.No<br>&nbsp;</th>
+
+                            <th>Festival <br>&nbsp;</th>
+
+                            <th>Event <br>&nbsp;</th>
+
+                            <th>Participant <br>Category</th>
+
+                            <th>Participant <br>Type</th>
+
+                            <th>Institution<br>&nbsp;</th>
+
+                            <th>Chest  <br>Number</th>
+
+                            <th>Name <br>&nbsp;</th>
+
+                            <th>Phone<br>&nbsp;</th>
+
+                            <th>Email<br>&nbsp;</th>
+
+                            <th>Id<br>&nbsp;</th>
+
+                            <th>Id Card or<br>Document</th>
+
+                            <th>Reported<br>&nbsp;</th>
+
+                          <th> Edit<br>&nbsp; </th>
+
+                          <th> Delete<br>&nbsp; </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for row in table_data %}
+                      <tr id="tbody_content">
+                          <td style="text-align:right;">{{ forloop.counter }}</td>
+                          <td>{{ row.festival_name }}</td>
+                          <td>{{ row.event_name }}</td>
+                          <td>{{ row.event_category }}</td>
+                          <td>{{ row.participant_category }}</td>
+                          <td>{{ row.Participant_college }}</td>
+                          <td>{{ row.event_chest_no }}</td>
+                          <td>{{ row.participant_name }}</td>
+                          <td>{{ row.participant_phone }}</td>
+                          <td>{{ row.participant_email }}</td>
+                          <td style="text-align:right;">{{ row.participant_id_no }}</td>
+                          <td>
+                              <a href="{{ row.participant_id_card }}" target="_blank">
+                                    <button type="button" class="btn btn-primary btn-sm">View </button>
+                              </a>
+                          </td>
+                          <td style="text-align:center;"><input type="checkbox"></td>
+                          <td><a href="../ParticipantListEdit1/{{row.child_id}}"><label class="badge badge-primary">Edit </label></a></td>
+                          <td><a href="../ParticipantListDelete/{{row.child_id}}"><label class="badge badge-danger">Delete </label></a></td>
+                      </tr>
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+</div>
+{% endblock %}

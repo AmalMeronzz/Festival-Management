@@ -1,0 +1,141 @@
+{% extends 'AdminMain/Festival.html' %}
+{% block content %}
+
+<div class="col-12 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Organizing Committee Member </h4>
+                  <form class="form-sample" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <p class="card-description">
+                      &nbsp;
+                    </p>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label">Festival</label>
+                          <div class="col-sm-10">
+                            <select class="form-control" name="festival_master_header_id" onchange="updatefestival(this.value)" style="color:black;" required>
+                              {% for i in FestivalMaster %}
+                                  {% if i.id == data.FestivalId %}
+                                      <option value="{{ i.id }}" selected>{{ i.festival_name }}</option>
+                                  {% else %}
+                                      <option value="{{ i.id }}">{{ i.festival_name }}</option>
+                                  {% endif %}
+                              {% endfor %}
+                            </select>
+                            <input type="text" value="{{data.FestivalId}}" id="FestivalID" hidden name="festival_master_header_id">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Department</label>
+                          <div class="col-sm-8">
+                            <select class="form-control" name="department_master_id" onchange="updatedepartment(this.value)" style="color:black;" required>
+                              {% for i in Department %}
+                                  {% if i.id == data.DepartmentId %}
+                                          <option  value="{{ i.id }}" selected>{{i.department_name}}</option>
+                                  {% else %}
+                                          <option value="{{ i.id }}">{{ i.department_name }}</option>
+                                  {% endif %}
+                              {% endfor %}
+                            </select>
+                            <input type="text" value="{{data.DepartmentId}}" id="DepartmentID" hidden name="department_master_id">
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Committe Type</label>
+                          <div class="col-sm-8">
+                            <select class="form-control" name="committe_member_type_id" onchange="updatecommitte(this.value)"  style="color:black;" required>
+<!--                              <option value="{{data.Committee_Member_Type_Id}}">{{data.Committee_Member_Type}}</option>-->
+                              {% for i in CommitteType %}
+                                 {% if i.id == data.Committee_Member_Type_Id %}
+                                    <option  value="{{ i.id }}" selected>{{i.committe_member_type}}</option>
+                                    {% else %}
+                                    <option  value="{{ i.id }}" selected>{{i.committe_member_type}}</option>
+                                 {% endif %}
+                              {% endfor %}
+                            </select>
+                            <input type="text" value="{{data.Committee_Member_Type_Id}}" id="CommitteID" hidden name="committe_member_type_id">
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Name</label>
+                          <div class="col-sm-8">
+                            <input type="text" value="{{data.Committee_Member_Name}}" name="committe_member_name" class="form-control" required/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Phone</label>
+                          <div class="col-sm-8">
+                            <input type="text" value="{{data.Committee_Member_Phone}}" name="committe_member_phone" class="form-control" pattern="[6-9]{1}[0-9]{9}" required/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label">Photo </label>
+                          <div class="col-sm-10">
+                            <input type="file" name="photo" class="form-control" />
+                            <input type="text" value="{{data.Committee_Member_Photo}}" name="committe_member_photo" hidden>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                     <center><button type="submit" class="btn btn-primary mr-2">Submit</button>
+                         <button type="button" class="btn btn-light mr-2" onclick="ViewCommitte()">Cancel</button></center>
+                  </form>
+                </div>
+              </div>
+</div>
+<script>
+
+function ViewCommitte(){
+ window.location.href = "{% url 'ViewOrganizingCommitte' %}";
+}
+
+function updatefestival(id) {
+        document.getElementById('FestivalID').value = id;
+}
+
+function updatedepartment(id){
+        document.getElementById('DepartmentID').value = id;
+}
+
+function updatecommitte(id) {
+        document.getElementById('CommitteID').value = id;
+}
+
+ const fileInput = document.getElementById('photo_input');
+
+    // Event listener for file input change
+    fileInput.addEventListener('change', function() {
+        const hiddenPhotoInput = document.getElementById('hidden_photo');
+
+        // Check if a file has been selected
+        if (fileInput.files.length > 0) {
+            // Hide the hidden photo input if a file is selected
+            hiddenPhotoInput.setAttribute('hidden', 'true');
+        } else {
+            // Show the hidden photo input if no file is selected
+            hiddenPhotoInput.removeAttribute('hidden');
+        }
+    });
+
+</script>
+{% endblock %}

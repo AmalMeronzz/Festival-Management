@@ -1,0 +1,433 @@
+{% extends 'AdminMain/Festival.html' %}
+{% block content %}
+<!--<style>-->
+<!--    .group-details {-->
+<!--    display: none;-->
+<!--}-->
+<!--</style>-->
+<div class="col-12 grid-margin" >
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Spot Registration</h4>
+                  <form class="form-sample" method="post"action="../CreateParticipantRegistartion" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <p class="card-description">
+                      &nbsp;
+                    </p>
+                    <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-group row">
+                              <label class="col-sm-4 col-form-label">Festival</label>
+                              <div class="col-sm-8">
+                                  <select id="festivalSelect" class="form-control"  onchange="update_festival(this.value)"required style="color:black;">
+                                      <option value="{{ data.FestivalId }}">Select Festival &nbsp;{{ data.Festival }}</option>
+                                      {% for festival_item in festival %}
+                                          <option value="{{ festival_item.id }}" style="color:black;">{{ festival_item.festival_name }}</option>
+                                      {% endfor %}
+                                      <option value="{{ data.FestivalId }}" >{{ data.Festival }}</option>
+                                  </select>
+                                  <input type="hidden" id="FestivalID" name="festival_master_header_id">
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group row">
+                              <label class="col-sm-4 col-form-label">Event Category</label>
+                              <div class="col-sm-8">
+                                  <select id="eventSelect" class="form-control" onchange="update_event_category(this.value)" required style="color:black;">
+                                      <option value="">Select Event </option>
+                                      <option value="{{data.EventCategoryId}}" selected>{{data.EventCategory}}</option>
+                                  </select>
+                                  <input type="hidden" id="EventCategoryID" name="event_category_id">
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+
+                      <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-group row">
+                              <label class="col-sm-4 col-form-label">Participant category</label>
+                              <div class="col-sm-8">
+                                  <select id="participantSelect" class="form-control" onchange="update_participant_category(this.value)" required style="color:black;">
+                                      <option value="">Select Participant</option>
+                                      <option value="{{data.ParticipantCategoryId}}" selected>{{data.ParticipantCategory}}</option>
+                                  </select>
+                                  <input type="hidden" id="ParticipantCategoryID" name="participant_category_id">
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group row">
+                              <label class="col-sm-4 col-form-label">Event </label>
+                              <div class="col-sm-8">
+                                  <select id="EventMaster" class="form-control"onchange="getRegistrationFee(this.value)" required style="color:black;">
+                                      <option value="">Select Event Master</option>
+                                      <option value="{{data.EventMasterId}}" selected>{{data.EventName}}</option>
+                                  </select>
+                                  <input type="hidden" id="EventMasterID" name="event_master_id">
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                       <div class="col-md-6">
+                           <div class="form-group row">
+                               <label class="col-sm-4 col-form-label">Registration Fee</label>
+                               <div class="col-sm-8">
+                                   <input type="text" id="registrationFee" name="registration_fee" class="form-control" readonly/>
+                               </div>
+                           </div>
+                       </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Extra Fee</label>
+                          <div class="col-sm-8">
+                              <input type="text"  name="extra_fee" id="extraFee" class="form-control" required/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+<!--                       <div class="row">-->
+<!--                       <div class="col-md-6">-->
+<!--                           <div class="form-group row">-->
+<!--                               <label class="col-sm-4 col-form-label">Event Chest No.</label>-->
+<!--                               <div class="col-sm-8">-->
+<!--                                   <input type="text"  name="chest_no" class="form-control" required/>-->
+<!--                               </div>-->
+<!--                           </div>-->
+<!--                       </div>-->
+<!--                      <div class="col-md-6">-->
+<!--                        <div class="form-group row">-->
+<!--                          <label class="col-sm-4 col-form-label">Receipt No.</label>-->
+<!--                          <div class="col-sm-8">-->
+<!--                              <input type="text" name="receipt_no" class="form-control" required/>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+                      <div class="row">
+                          <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Total Amount</label>
+                          <div class="col-sm-8">
+                              <input type="text"  name="total_amount" class="form-control" readonly/>
+                          </div>
+                        </div>
+                      </div>
+                           <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Payment type</label>
+                          <div class="col-sm-8">
+                                  <select id="CollegeID" class="form-control" name="payment_type" style="color:black;" required>
+                                      <option value="">Select payment type</option>
+                                      <option value="0" >CASH</option>
+                                      <option value="1" >UPI</option>
+                                  </select>
+                                  <input type="hidden" id="maxTeamSizeInput" >
+                          </div>
+                        </div>
+                      </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group row">
+                              <label class="col-sm-4 col-form-label">College Name & Place</label>
+                              <div class="col-sm-8">
+                                  <input type="text"  name="college_name" class="form-control" required/>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group row">
+                              <label class="col-sm-4 col-form-label">Referred By</label>
+                              <div class="col-sm-8">
+                                  <input type="text" name="reference_by" placeholder="Full Name" class="form-control" />
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="row group-details">
+                          <div class="col-lg-12 grid-margin stretch-card">
+                              <div class="card">
+                                <div class="card-body">
+                                  <div class="table-responsive pt-3">
+                                    <table class="table table-bordered">
+                                      <thead>
+                                        <tr>
+                                            <th>
+                                            #
+                                            </th>
+                                            <th>
+                                            Participant type
+                                            </th>
+                                            <th>
+                                                 Name
+                                            </th>
+                                            <th>
+                                                Phone
+                                            </th>
+                                            <th>
+                                                Email
+                                            </th>
+                                            <th>
+                                                College ID Number
+                                            </th>
+                                            <th>
+                                                ID Card / Document
+                                            </th>
+                                        </tr>
+                                      </thead>
+                                      <tbody  id="tableBody">
+                                        <tr>
+<!--                                            <td>-->
+<!--                                            1-->
+<!--                                            </td>-->
+<!--                                            <td>-->
+<!--                                                team leader-->
+<!--                                            </td>-->
+<!--                                            <td>-->
+<!--                                                 <input type="text" required>-->
+<!--                                            </td>-->
+<!--                                            <td>-->
+<!--                                               <input type="text" required>-->
+<!--                                            </td>-->
+<!--                                            <td>-->
+<!--                                                <input type="number" required>-->
+<!--                                            </td>-->
+<!--                                            <td>-->
+<!--                                                 <input type="file" required>-->
+<!--                                            </td>-->
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+                      <img   onclick="addNewRow()" src="https://cdn-icons-png.flaticon.com/512/1665/1665578.png" width="35vh;" height="35vh;" style="margin-left:30px;">
+                      <h5 style="margin-left:18px;">add row</h5>
+                     <center><button type="submit" class="btn btn-primary mr-2">Submit</button>
+                         <button type="button" class="btn btn-light mr-2" onclick="ViewCommitte()">Cancel</button></center>
+                  </form>
+                </div>
+              </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function() {
+
+
+        // Rest of your JavaScript for handling Event selection
+});
+
+ $('#festivalSelect').change(function() {
+            var festivalId = $(this).val();
+
+            // AJAX call to fetch Event Categories based on selected Festival ID
+            $.ajax({
+                url: '/get_event_categories/',  // Replace with your URL for fetching event categories
+                method: 'GET',
+                data: { festival_id: festivalId },
+                success: function(response) {
+                 console.log('Response from server:', response);
+                    $('#eventSelect').empty(); // Clear previous options
+                    $('#eventSelect').append('<option value="">Select Event Category</option>');
+                    $.each(response, function(index, category) {
+                        $('#eventSelect').append('<option value="' + category.event_category_id + '">' + category.event_category_id__event_category_name + '</option>');
+                    });
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+});
+
+
+function ViewCommitte(){
+ window.location.href = "{% url 'ViewParticipantRegistration' %}";
+}
+
+
+function update_event_category(id){
+        document.getElementById('EventCategoryID').value = id;
+}
+
+function update_participant_category(id){
+        document.getElementById('ParticipantCategoryID').value = id;
+}
+
+
+function update_event(id){
+        document.getElementById('EventMasterID').value = id;
+}
+
+function update_festival(id){
+        document.getElementById('FestivalID').value = id;
+}
+
+$('#eventSelect').change(function() {
+            var EventCategoryId = $(this).val();
+
+            // AJAX call to fetch Event Categories based on selected Festival ID
+            $.ajax({
+                url: '/get_participant_categories/',  // Replace with your URL for fetching event categories
+                method: 'GET',
+                data: { festival_id: EventCategoryId },
+                success: function(response) {
+                 console.log('Response from server:', response);
+                    $('#participantSelect').empty(); // Clear previous options
+                    $('#participantSelect').append('<option value="">Select participant Category</option>');
+                    $.each(response, function(index, category) {
+                        $('#participantSelect').append('<option value="' + category.participant_category_id + '">' + category.participant_category_id__participant_category_name + '</option>');
+                    });
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+
+$('#participantSelect').change(function() {
+            var participantId = $(this).val();
+            var EventCategoryId = $("#eventSelect option:selected").val()||0;
+            var FestivalId = document.getElementById('FestivalID').value;
+
+            // AJAX call to fetch Event Categories based on selected Festival ID
+            $.ajax({
+                url: '/get_event_master_for_participant/',  // Replace with your URL for fetching event categories
+                method: 'GET',
+                data: { participant_id: participantId ,event_category_id:EventCategoryId,festival_id: FestivalId },
+                success: function(response) {
+                 console.log('Response from server:', response);
+                    $('#EventMaster').empty(); // Clear previous options
+                    $('#EventMaster').append('<option value="">Select Event</option>');
+                    $.each(response, function(index, category) {
+                        $('#EventMaster').append('<option value="' + category.id + '">' + category.event_name + '</option>');
+                    });
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+
+
+function getRegistrationFee(eventId) {
+    document.getElementById('EventMasterID').value = eventId;
+    EventMasterID
+
+    $.ajax({
+        url: '/get_registration_fee/',
+        method: 'GET',
+        data: { event_id: eventId },
+        success: function(response) {
+            console.log('Registration Fee Response:', response);
+            if ('registration_fee' in response && 'min_team_size' in response && 'max_team_size' in response) {
+                $('#registrationFee').val(response.registration_fee);
+                var minTeamSize = response.min_team_size;
+                var maxTeamSize = response.max_team_size;
+                $('#maxTeamSizeInput').val(maxTeamSize);
+                generateGroupDetailsRows(minTeamSize);
+            } else {
+                console.error('Registration fee or max team size not found in response');
+            }
+        },
+        error: function(error) {
+            console.error('Error fetching registration fee:', error);
+        }
+    });
+}
+
+function generateGroupDetailsRows(minTeamSize) {
+    var tableBody = $('.table tbody');
+    tableBody.empty(); // Clear existing rows
+
+    for (var i = 1; i <= minTeamSize; i++) {
+    var role = i === 1 ? 'Team leader' : 'Team member';
+        var newRow = `
+            <tr>
+                <td>${i}</td>
+<!--                <td>${role}</td>-->
+                <td><input type="text" name="participant_type" value="${role}" readonly></td>
+                <td><input type="text" name="participant_name" required></td>
+                <td><input type="number" name="participant_phone" required></td>
+                <td><input type="email" name="participant_email" required></td>
+                <td><input type="text" name="participant_id_no" required></td>
+                <td><input type="file" name="participant_id_image" required></td>
+            </tr>
+        `;
+        tableBody.append(newRow);
+    }
+}
+
+
+function addNewRow() {
+    var tableBody = $('.table tbody');
+    var maxTeamSizeInput = $('#maxTeamSizeInput');
+    var maxTeamSize = parseInt(maxTeamSizeInput.val());
+    var rowCount = tableBody.children('tr').length;
+
+    if (!isNaN(maxTeamSize) && rowCount < maxTeamSize) {
+        rowCount++; // Calculate the new row number
+
+        var newRow = `
+            <tr>
+                <td>${rowCount}</td>
+<!--                <td>Team member ${rowCount}</td>-->
+                <td><input type="text" name="participant_type" value="Team member" readonly></td>
+                <td><input type="text" name="participant_name" required></td>
+                <td><input type="number" name="participant_phone" required></td>
+                <td><input type="email" name="participant_email" required></td>
+                <td><input type="text" name="participant_id_no" required></td>
+                <td><input type="file" name="participant_id_image" required></td>
+                <td><button class="btn" onclick="removeRow(this)">X</button></td>
+            </tr>
+        `;
+
+        tableBody.append(newRow);
+
+        // Update the value in maxTeamSizeInput
+        //maxTeamSizeInput.val(rowCount);
+    } else {
+        alert('Maximum team size reached.');
+    }
+}
+
+
+
+function removeRow(button) {
+    var row = $(button).closest('tr');
+    row.remove();
+    updateRowNumbers(); // Update row numbers after removal
+}
+
+function updateRowNumbers() {
+    var tableRows = $('.table tbody tr');
+    tableRows.each(function(index) {
+        $(this).find('td:first').text(index + 1);
+    });
+}
+
+$('#extraFee').on('input', function() {
+    calculateTotalAmount();
+});
+
+
+function calculateTotalAmount() {
+    var registrationFee = parseFloat($('#registrationFee').val()) || 0;
+    var extraFee = parseFloat($('#extraFee').val()) || 0;
+
+    var totalAmount = registrationFee + extraFee;
+
+    // Display the total amount in the "Total Amount" input
+    $('input[name="total_amount"]').val(totalAmount.toFixed(2));
+}
+
+
+</script>
+
+{% endblock %}

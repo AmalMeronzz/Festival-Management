@@ -1,0 +1,27 @@
+{% extends 'AdminMain/Festival.html' %}
+{% block content %}
+<div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">ADD DEPARTMENT</h4>
+                  <form class="forms-sample" method="post">
+                     {% csrf_token %}
+                    <div class="form-group">
+                      <label for="exampleInputUsername1">Department Name</label>
+                      <input type="text" class="form-control" name="name" id="exampleInputUsername1" placeholder="Username">
+                    </div>
+                    <div class="form-check form-check-flat form-check-primary">
+                      <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input">
+                        Remember me
+                      </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <a href="../create1"></a><button class="btn btn-light">Cancel</button></a>
+
+                  </form>
+                </div>
+              </div>
+</div>
+
+{% endblock %}

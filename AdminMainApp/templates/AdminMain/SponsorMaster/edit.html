@@ -1,0 +1,147 @@
+{% extends 'AdminMain/Festival.html' %}
+{% block content %}
+<!--<div class="col-md-6 grid-margin stretch-card">-->
+<!--              <div class="card">-->
+<!--                <div class="card-body">-->
+<!--                  <h4 class="card-title">Edit Sponsor</h4>-->
+<!--                  <form class="forms-sample" method="post" enctype="multipart/form-data">-->
+<!--                     {% csrf_token %}-->
+<!--                    <div class="form-group">-->
+<!--                      <label for="exampleInputUsername1">Sponsor Name {{festival}}</label>-->
+<!--                      <input type="text" class="form-control" name="name" value="{{data.sponsor_name}}" id="exampleInputUsername1" >-->
+<!--                    </div>-->
+<!--                      <div class="form-group">-->
+<!--                      <label for="exampleInputUsername1">logo</label>-->
+<!--                      <input type="file" class="form-control" name="logo" value="{{data.sponsor_logo}}" >-->
+<!--                    </div>-->
+<!--                    <button type="submit" class="btn btn-primary mr-2">Submit</button>-->
+<!--                    <button type="button" class="btn btn-light" id="redirectButton">Cancel</button>-->
+
+<!--                  </form>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--</div>-->
+
+<div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Edit Sponsor</h4>
+                  <form class="forms-sample" method="post" enctype="multipart/form-data">
+                     {% csrf_token %}
+
+                    <div class="row">
+                          <!-- ... Your existing code ... -->
+
+<div class="col-md-6">
+    <div class="form-group">
+        <label class="col-form-label">Festival</label>
+        <select id="festivalSelect" class="form-control" onchange="update_festival(this.value)" required style="color:black;">
+            <option value="" selected>Select Festival</option>
+            {% for festival_item in festival %}
+                <option value="{{ festival_item.id }}" style="color:black;" {% if festival_item.id == FestivalId %} selected {% endif %}> {{ festival_item.festival_name }}</option>
+            {% endfor %}
+        </select>
+        <input type="hidden" id="FestivalID" name="festival_master_header_id" value="{{ FestivalId }}">
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="form-group">
+        <label class="col-form-label">Sponsor Type</label>
+        <select id="SponsorType" class="form-control" name="sponsor_type" required style="color:black;">
+            <option value="" selected>Select Sponsor Type</option>
+            <option value="TITLE" {% if 'TITLE' == sponsor_type %} selected {% endif %}>TITLE</option>
+            <option value="POWER 1" {% if 'POWER 1' == sponsor_type %} selected {% endif %}>POWER 1</option>
+            <option value="POWER 2" {% if 'POWER 2' == sponsor_type %} selected {% endif %}>POWER 2</option>
+            <option value="ASSOCIATE 1" {% if 'ASSOCIATE 1' == sponsor_type %} selected {% endif %}>ASSOCIATE 1</option>
+            <option value="ASSOCIATE 2" {% if 'ASSOCIATE 2' == sponsor_type %} selected {% endif %}>ASSOCIATE 2</option>
+            <option value="REGISTRATION" {% if 'REGISTRATION' == sponsor_type %} selected {% endif %}>REGISTRATION</option>
+            <option value="THEME" {% if 'THEME' == sponsor_type %} selected {% endif %}>THEME</option>
+            <option value="CO-SPONSOR 1" {% if 'CO-SPONSOR 1' == sponsor_type %} selected {% endif %}>CO-SPONSOR 1</option>
+            <option value="CO-SPONSOR 2" {% if 'CO-SPONSOR 2' == sponsor_type %} selected {% endif %}>CO-SPONSOR 2</option>
+            <option value="CO-SPONSOR 3" {% if 'CO-SPONSOR 3' == sponsor_type %} selected {% endif %}>CO-SPONSOR 3</option>
+        </select>
+    </div>
+</div>
+<!-- ... The rest of your code ... -->
+
+                      </div>
+                      <div class="row">
+                          <div class="col-md-12">
+                               <div class="form-group">
+                              <label class="col-form-label">Event </label>
+                                  <select id="EventMaster" class="form-control"onchange="update_event(this.value)" style="color:black;">
+                                      <option value="" selected>Select Event </option>
+                                      <option value="{{EventMasterId}}" selected>{{EventName}}</option>
+                                  </select>
+                                  <input type="hidden" id="EventMasterID" value="{{EventMasterId}}" name="event_master_id">
+                          </div>
+                          </div>
+                      </div>
+                    <div class="form-group">
+                      <label for="exampleInputUsername1">Name</label>
+                      <input type="text" class="form-control" value="{{Sponsor}}" name="name" id="exampleInputUsername1"  required>
+                    </div>
+                      <div class="form-group">
+                      <label for="exampleInputUsername1">Logo</label>
+                      <input type="file" class="form-control" name="logo" >
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button type="button" class="btn btn-light" id="redirectButton">Cancel</button>
+
+                  </form>
+                </div>
+              </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+document.getElementById("redirectButton").onclick = function() {
+    window.location.href = "{% url 'ViewSponsorMaster' %}";
+}
+
+
+$('#festivalSelect').change(function() {
+    var festivalId = $(this).val();
+
+    // AJAX call to fetch Event Categories based on selected Festival ID
+    $.ajax({
+        url: '/get_festival_event/',
+        method: 'GET',
+        data: { festival_id: festivalId },
+        dataType: 'json',
+        success: function(response) {
+            console.log('Response from server:', response);
+
+            // Clear previous options
+            $('#EventMaster').empty().append('<option value="" selected>Select Event</option>');
+
+            // Populate the dropdown with new options
+            $.each(response, function(index, event) {
+                $('#EventMaster').append('<option value="' + event.id + '">' + event.event_name + '</option>');
+            });
+
+            // Trigger the change event to update the hidden field
+            $('#EventMaster').trigger('change');
+        },
+        error: function(error) {
+            console.log('Error:', error);
+        }
+    });
+});
+
+
+function update_festival(id){
+        document.getElementById('FestivalID').value = id;
+}
+
+function update_event(id){
+        document.getElementById('EventMasterID').value = id;
+}
+
+
+</script>
+
+
+{% endblock %}

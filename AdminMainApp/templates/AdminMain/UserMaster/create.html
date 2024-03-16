@@ -1,0 +1,149 @@
+{% extends 'AdminMain/Festival.html' %}
+{% block content %}
+
+<div class="col-12 grid-margin" >
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">User Master</h4>
+                  <form class="form-sample" method="post">
+                    {% csrf_token %}
+                    <p class="card-description">
+                      &nbsp;
+                    </p>
+                    <div class="row">
+                       <div class="col-md-12">
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label">User Type <br></label>
+                          <div class="col-sm-10">
+                            <select class="form-control" onchange="update_usertype(this.value, this.options[this.selectedIndex].text)" required style="color:black;">
+                              <option value="">Select User type</option>
+                              {% for i in data %}
+                              <option  value="{{ i.id }}">{{i.usertype}}</option>
+                              {% endfor %}
+                            </select>
+                            <input type="text" id="UserTypeId" hidden name="user_type_id">
+<!--                            <input type="text" id="UserTypeId" hidden name="user_type_id">-->
+                          </div>
+                        </div>
+                       </div>
+                    </div>
+                    <div class="row hiddenclass" hidden>
+                       <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Festival <br></label>
+                          <div class="col-sm-8">
+                            <select id="festivalSelect" class="form-control" onchange="update_festival(this.value)" required style="color:black;">
+                              <option value="">Select Festival</option>
+                              {% for i in festival %}
+                              <option  value="{{ i.id }}">{{i.festival_name}}</option>
+                              {% endfor %}
+                            </select>
+                            <input type="text" id="FestivalID" hidden name="festival_master_header_id">
+                          </div>
+                        </div>
+                       </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Commitee Member</label>
+                          <div class="col-sm-8">
+                            <select id="memberSelect" class="form-control" onchange="update_member(this.value)" required style="color:black;">
+                              <option value="">Select Event Category</option>
+                            </select>
+                            <input type="text" id="OrganizingCommitteeId" hidden name="organizingc_ommittee_id">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row " >
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Login id</label>
+                          <div class="col-sm-8">
+                            <input type="text" name="loginId" id="min_team_size_input"  class="form-control" required/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Login Password</label>
+                          <div class="col-sm-8">
+                            <input type="password" name="password" id="maxTeamSizeInput" class="form-control" required/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                     <center><button type="submit" class="btn btn-primary mr-2">Submit</button>
+                       <button type="button" class="btn btn-light mr-2" onclick="ViewCommitte()">Cancel</button></center>
+                  </form>
+                </div>
+              </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+function ViewCommitte(){
+ window.location.href = "{% url 'CreateUserMaster' %}";
+}
+
+function update_festival(id){
+        document.getElementById('FestivalID').value = id;
+}
+
+function update_member(id){
+document.getElementById('OrganizingCommitteeId').value = id;
+}
+
+ $('#festivalSelect').change(function() {
+            var festivalId = $(this).val();
+
+            // AJAX call to fetch Event Categories based on selected Festival ID
+            $.ajax({
+                url: '/get_committe_member/',  // Replace with your URL for fetching event categories
+                method: 'GET',
+                data: { festival_id: festivalId },
+                success: function(response) {
+                 console.log('Response from server:', response);
+                    $('#memberSelect').empty(); // Clear previous options
+                    $('#memberSelect').append('<option value="">Select organizing member</option>');
+                    $.each(response, function(index, category) {
+                        $('#memberSelect').append('<option value="' + category.id + '">' + category.committe_member_name + '</option>');
+                    });
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+
+function update_event(id){
+        document.getElementById('EventID').value = id;
+}
+
+function update_usertype(selectedValue, selectedText) {
+    document.getElementById('UserTypeId').value = selectedValue
+    var userType = selectedText.toLowerCase();
+    var hiddenDiv = document.querySelector('.hiddenclass');
+    var submitButton = document.querySelector('button[type="submit"]');
+    var festivalSelect = document.getElementById('festivalSelect'); // Use getElementById for specific IDs
+    var memberSelect = document.getElementById('memberSelect');
+
+    if (userType === 'committee') { // Show the hidden class for Group
+      hiddenDiv.removeAttribute('hidden');
+      submitButton.disabled = false; // Enable form submission for Group
+      festivalSelect.setAttribute('required', 'true');
+      memberSelect.setAttribute('required', 'true');
+
+    } else { // Hide the hidden class for Single or other options
+      hiddenDiv.setAttribute('hidden', 'hidden');
+      submitButton.disabled = true; // Disable form submission for Single
+      festivalSelect.removeAttribute('required');
+      memberSelect.removeAttribute('required');
+    }
+
+<!--    // Prevent form submission if 'Single' is selected-->
+<!--    if (selectedValue === '6') {-->
+<!--      submitButton.disabled = true;-->
+<!--    }-->
+  }
+</script>
+{% endblock %}

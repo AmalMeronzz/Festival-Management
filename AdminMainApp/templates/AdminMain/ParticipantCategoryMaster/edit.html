@@ -1,0 +1,27 @@
+{% extends 'AdminMain/Festival.html' %}
+{% block content %}
+<div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Edit Participant Category</h4>
+                  <form class="forms-sample" method="post" >
+                     {% csrf_token %}
+                    <div class="form-group">
+                      <label for="exampleInputUsername1">Category Name</label>
+                      <input type="text" class="form-control" name="name" value="{{data.participant_category_name}}" id="exampleInputUsername1" >
+                    </div>
+                    <center><button type="submit" class="btn btn-primary mr-2">Submit</button></center>
+                  </form>
+                   <button class="btn btn-light" id="redirectButton">Cancel</button>
+                </div>
+              </div>
+</div>
+
+<script>
+document.getElementById("redirectButton").onclick = function() {
+    window.location.href = "{% url 'ParticipantCategoryMaster' %}";
+}
+</script>
+
+
+{% endblock %}

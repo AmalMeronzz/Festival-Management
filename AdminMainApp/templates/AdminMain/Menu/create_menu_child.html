@@ -1,0 +1,31 @@
+{% extends 'AdminMain/Festival.html' %}
+{% block content %}
+<div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Add {{menu_header}} Sub Menu </h4>
+                  <form class="forms-sample" method="post" >
+                     {% csrf_token %}
+                    <div class="form-group">
+                      <label for="exampleInputUsername1">Name</label>
+                      <input type="text" class="form-control" name="name" value="{{data.name}}" placeholder="Enter sub menu" id="exampleInputUsername1" >
+                    </div>
+                      <div class="form-group">
+                      <label for="exampleInputUsername1">Url</label>
+                      <input type="text" class="form-control" name="url" value="{{data.url}}" placeholder="Enter url" id="exampleInputUsername2" >
+                    </div>
+                      <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                      <button type="button" class="btn btn-light" id="redirectButton">Cancel</button>
+                  </form>
+                </div>
+              </div>
+</div>
+
+<script>
+document.getElementById("redirectButton").onclick = function() {
+    window.location.href = "{% url 'ViewMenuHeader' %}";
+}
+</script>
+
+
+{% endblock %}

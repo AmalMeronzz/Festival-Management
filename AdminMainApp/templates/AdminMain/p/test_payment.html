@@ -1,0 +1,84 @@
+{% extends 'AdminMain/Festival.html' %}
+{% block content %}
+
+<!--<h1>Payment Details</h1>-->
+<!--Amount: {{ amount_in_rupees }} INR-->
+<!--<form action="{% url 'payment_success' %}" method="POST">-->
+<!--    <script src="https://checkout.razorpay.com/v1/checkout.js"-->
+<!--            data-key="{{ payment.id }}"-->
+<!--            data-amount="{{ payment.amount }}"-->
+<!--            data-currency="INR"-->
+<!--            data-order_id="{{ payment.id }}"-->
+<!--            data-buttontext="Pay with Razorpay"-->
+<!--            data-name="Your Company Name"-->
+<!--            data-description="Payment"-->
+<!--            data-image="url_to_your_logo"-->
+<!--            data-prefill.name="Your Name"-->
+<!--            data-prefill.email="your_email@example.com"-->
+<!--            data-prefill.contact="1234567890"-->
+<!--    ></script>-->
+<!--    <input type="hidden" custom="Hidden Element" name="hidden">-->
+<!--</form>-->
+
+
+<h1>Payment Details</h1>
+Amount: {{ amount_in_rupees }} INR
+<form id="razorpay-form" action="{% url 'payment_success' %}" method="POST">
+    {% csrf_token %}
+    <button type="button" id="razorpay-button">Pay with Razorpay</button>
+    <input type="hidden" name="hidden">
+</form>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    // Replace this with your Django variable assignment
+    var data = {
+        MerchantID: "{{ your_MerchantID_variable }}",
+        Amount: {{ payment.amount }}, // Ensure the amount is in the correct format
+        TransactionDesc: "{{ your_TransactionDesc_variable }}",
+        OnlineTrackId: "{{ your_OnlineTrackId_variable }}",
+        Returnurl: "{{ your_Returnurl_variable }}",
+        Name: "{{ your_Name_variable }}",
+        Email: "{{ your_Email_variable }}",
+        MobileNumber: "{{ your_MobileNumber_variable }}"
+    };
+
+    // Function to initiate Razorpay transaction
+    var initiateRazorpayTransaction = function() {
+        var options = {
+            "key": 'rzp_test_kTUx8LbK9nmHY3',
+            "amount": 1 * 100,
+            "currency": "INR",
+            "name": "RCMAS COLLEGE",
+            "description": 'amount',
+            "image": "https://mcampus.rajagiricollege.edu.in/Content/sh/images/icon/logo.png",
+<!--            "order_id": '{{ unique_order_id }}',-->
+            "callback_url": "{% url 'payment_success' %}",
+            "prefill": {
+                "name": "amal",
+                "email": "amal@gmail.com",
+                "contact": "7558865781"
+            },
+            "readonly": { 'email': true, 'contact': true },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+
+        var rzp1 = new Razorpay(options);
+        rzp1.on('payment.success', function(response) {
+            // Handle success event if needed
+            document.getElementById('razorpay-form').submit();
+        });
+        rzp1.open();
+    };
+
+    // Attach the Razorpay transaction initiation to a button click
+    document.getElementById('razorpay-button').addEventListener('click', function() {
+        initiateRazorpayTransaction();
+    });
+</script>
+{% endblock %}

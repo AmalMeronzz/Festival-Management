@@ -1,0 +1,307 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.left-content {
+    flex: 1;
+}
+
+.right-content {
+    display: flex;
+    align-items: center;
+}
+@media print {
+            /* Hide elements with class 'hide-on-print' */
+            .hide-on-print {
+                display: none !important;
+            }
+            @page {
+        margin: 0;
+        size: auto;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    header,
+    footer {
+        display: none;
+    }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="text-center">
+        <img src="static/images/logo.png" alt="Example Logo" class="mt-3" />
+    </div>
+
+    <br>
+
+    <h2 class="text-center">College Report</h2>
+<div class="button-container">
+    <div class="left-content">
+        &nbsp;<label><b>Date: {% now "d-m-Y" %}</b></label>
+    </div>
+    <div class="right-content">
+        <button id="printButton" class="btn btn-primary hide-on-print" style="height:35px">Print</button>&nbsp;&nbsp;
+        <button id="exportButton" class="btn btn-primary hide-on-print" style="height:35px">Excel</button>&nbsp;
+    </div>
+</div>
+    <br>
+<div class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <p class="card-description">
+                &nbsp;
+            </p>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label"><b>Festival</b></label>
+                        <div class="col-sm-8">
+                            <select id="festivalSelect" class="form-control" onchange="update_festival(this.value)" required style="color:black;">
+                                <option value="{{ data.FestivalId }}">Select Festival &nbsp;{{ data.Festival }}</option>
+                                {% for festival_item in festival %}
+                                    <option value="{{ festival_item.id }}" style="color:black;">{{ festival_item.festival_name }}</option>
+                                {% endfor %}
+                                <option value="{{ data.FestivalId }}">{{ data.Festival }}</option>
+                            </select>
+                            <input type="hidden" id="FestivalID" name="festival_master_header_id">
+                            <input type="text" hidden id="TotalPages" >
+                            <input type="text" hidden id="CurrentPage" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-hover table-bordered" id="college">
+    <thead>
+        <td style="text-align:center;"><b>Sl.No</b></td>
+        <td style="text-align:center;"><b>College</b></td>
+        <td style="text-align:center;"><b>Events</b></td>
+    </thead>
+    <tbody>
+    <tr>
+
+    </tr>
+    </tbody>
+</table>
+
+<div class="button-container" style="margin-right:10px; float:right;">
+    <center>
+    <button id="previousPage" class="btn btn-primary hide-on-print"  style="font-size: 12px; padding: 5px 10px;">Previous</button>
+    <button id="nextPage" class="btn btn-primary hide-on-print" style="font-size: 12px; padding: 5px 10px;">Next</button></center>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script>
+$(document).ready(function() {
+  // Pagination variables
+    var currentPage = parseInt($('#CurrentPage').val());
+    var totalPages = parseInt($('#TotalPages').val());
+
+    $('#nextPage').on('click', function() {
+
+    var currentPage = parseInt($('#CurrentPage').val());
+    var totalPages = parseInt($('#TotalPages').val());
+
+    if (currentPage < totalPages) {
+
+        currentPage++;
+        console.log("Current page after increment:", currentPage);
+        document.getElementById('CurrentPage').value =  currentPage;
+<!--        document.getElementById('page').value =  currentPage;-->
+        GetNextPage();
+    } else {
+        alert('Current page is already at the maximum');
+    }
+    });
+
+    $('#previousPage').on('click', function() {
+        var currentPage = parseInt($('#CurrentPage').val()); // Get the current page number
+        var totalPages = parseInt($('#TotalPages').val()); // Get the total number of pages
+
+        if (currentPage > 1) { // Check if it's not the first page
+            currentPage--; // Decrement the current page number
+            $('#CurrentPage').val(currentPage); // Update the hidden input field with the new current page number
+            GetPreviousPage(); // Call the function to fetch the previous page data
+        } else {
+            alert('Already on the first page');
+        }
+    });
+
+
+ function GetNextPage() {
+        var festivalId = $('#festivalSelect').val();
+        var currentPage = parseInt($('#CurrentPage').val());
+        $.ajax({
+            url: '/get_college_report1/',
+            method: 'GET',
+            data: { festival_id: festivalId, page: currentPage },
+            success: function(response) {
+                console.log(response); // Log the response for debugging
+
+                if ('event_data' in response) {
+                    var tbody = $('table tbody');
+                    tbody.empty();  // Clear previous rows
+
+                    // Loop through the event data and append rows to the tbody
+                    $.each(response.event_data, function(index, eventData) {
+                        var row = '<tr>' +
+                            '<td style="text-align:right;">' + ((currentPage - 1) * 10 + index + 1) + '</td>' +
+                            '<td>' + eventData.college_name + '</td>' +
+                            '<td>' + eventData.events + '</td>' +
+                            '</tr>';
+
+                        tbody.append(row);
+                    });
+
+                    // Update pagination information
+                    totalPages = response.total_pages;
+                    $('#TotalPages').val(totalPages);
+                    $('#CurrentPage').val(currentPage);
+                } else {
+                    // Handle the case where there is an error or no event data
+                    console.error(response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText); // Log the error response
+            }
+        });
+ }
+
+function GetPreviousPage() {
+    var festivalId = $('#festivalSelect').val();
+    var currentPage = parseInt($('#CurrentPage').val());
+
+    $.ajax({
+        url: '/get_college_report2/',
+        method: 'GET',
+        data: { festival_id: festivalId, page: currentPage },
+        success: function(response) {
+            console.log(response); // Log the response for debugging
+
+            if ('event_data' in response) {
+                var tbody = $('table tbody');
+                tbody.empty(); // Clear previous rows
+
+                // Loop through the event data and append rows to the tbody
+                $.each(response.event_data, function(index, eventData) {
+                    var row = '<tr>' +
+                        '<td style="text-align:right;">' + ((currentPage - 1) * 10 + index + 1) + '</td>' +
+                        '<td>' + eventData.college_name + '</td>' +
+                        '<td>' + eventData.events + '</td>' +
+                        '</tr>';
+
+                    tbody.append(row);
+                });
+
+                // Update pagination information
+                $('#TotalPages').val(response.total_pages);
+                $('#CurrentPage').val(currentPage);
+            } else {
+                // Handle the case where there is an error or no event data
+                console.error(response.error);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText); // Log the error response
+        }
+    });
+}
+
+        $('#festivalSelect').change(function() {
+        var festivalId = $(this).val();
+
+        $.ajax({
+            url: '/get_college_report/',
+            method: 'GET',
+            data: { festival_id: festivalId },  // Fix: Use festivalId instead of selectedFestivalId
+            success: function(response) {
+
+            document.getElementById('TotalPages').value = response.total_pages;
+            document.getElementById('CurrentPage').value = response.current_page;
+
+                if ('event_data' in response) {
+                    var tbody = $('table tbody');
+                    tbody.empty();  // Clear previous rows
+
+                    // Loop through the event data and append rows to the tbody
+                    $.each(response.event_data, function(index, eventData) {
+                        var row = '<tr>' +
+                            '<td style="text-align:right;">' + (index + 1) + '</td>' +
+                            '<td>' + eventData.college_name + '</td>' +
+                            '<td>' + eventData.events + '</td>' +
+                            '</tr>';
+
+                        tbody.append(row);
+                    });
+                } else {
+                    // Handle the case where there is an error or no event data
+                    console.error(response.error);
+                }
+            },
+            error: function(error) {
+                console.error(error);
+            }
+        });
+        });
+
+        // Rest of your JavaScript for handling Event selection
+
+    });
+
+
+function ViewCommitte(){
+ window.location.href = "{% url 'ViewEventScheduler' %}";
+}
+
+
+function update_festival(id){
+        document.getElementById('FestivalID').value = id;
+}
+function s2ab(s) {
+    var buf = new ArrayBuffer(s.length);
+    var view = new Uint8Array(buf);
+    for (var i = 0; i < s.length; i++) {
+        view[i] = s.charCodeAt(i) & 0xFF;
+    }
+    return buf;
+}
+
+function exportToExcel() {
+    var table = document.getElementById('college');
+    var ws = XLSX.utils.table_to_sheet(table);
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    var blob = new Blob([s2ab(XLSX.write(wb, { bookType: 'xlsx', type: 'binary' }))], { type: 'application/octet-stream' });
+    saveAs(blob, 'participants.xlsx');
+}
+$('#exportButton').on('click', function() {
+    exportToExcel();
+});
+document.getElementById('printButton').addEventListener('click', function() {
+        window.print();
+    });
+</script>
+</body>
+</html>

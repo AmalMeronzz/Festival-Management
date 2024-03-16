@@ -1,0 +1,83 @@
+{% extends 'AdminMain/Student/index.html' %}
+{% block content %}
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Function to create an order and initialize Razorpay Checkout
+        function createOrderAndInitializeCheckout() {
+            // Make a request to your Django server to create an order
+            $.ajax({
+                type: 'POST',
+                url: '/create_order/',  // Replace with your Django endpoint for creating an order
+                data: {'registration_fee': {{ registration_fee }}},
+                success: function (response) {
+                    // Check for errors in the response
+                    if (response.error) {
+                        alert('Error: ' + response.error);
+                    } else {
+                        // Initialize Razorpay Checkout
+                        var options = {
+                            key: response.razorpay_key_id,
+                            amount: response.amount*100,
+                            currency: 'INR',
+                            name: 'RCMAS COLLEGE',
+                            description: '',
+                            image: 'https://mcampus.rajagiricollege.edu.in/Content/sh/images/icon/logo.png',
+                            order_id: response.order_id,
+                            handler: function (response) {
+                                // Verify the payment on the server
+                                verifyPayment(response);
+                            },
+                            notes: {
+                                address: 'Razorpay Corporate Office'
+                            },
+                            theme: {
+                                color: '#3399cc'
+                            }
+                        };
+
+                        var rzp1 = new Razorpay(options);
+                        rzp1.open();
+                    }
+                },
+                error: function (error) {
+                    alert('Error: Unable to create an order');
+                }
+            });
+        }
+
+        // Function to verify payment on the server
+        function verifyPayment(response) {
+            // Make a request to your Django server to verify the payment
+            $.ajax({
+                type: 'POST',
+                url: '/verify_payment/',  // Replace with your Django endpoint for verifying payment
+                data: {
+                    'razorpay_order_id': response.razorpay_order_id,
+                    'razorpay_payment_id': response.razorpay_payment_id,
+                    'razorpay_signature': response.razorpay_signature,
+                    'payment_id': '{{ payment_id }}',
+                },
+                success: function (verificationResponse) {
+                    // Handle the verification response as needed
+                    alert('Payment verification status: ' + verificationResponse.status);
+                },
+                error: function (error) {
+<!--                    alert('Error: Unable to verify payment');-->
+                },
+                complete: function () {
+                    // Redirect to GeneratePaymentReceipt URL after the Ajax call is complete
+                    window.location.href = "{% url 'GeneratePaymentReceipt' %}";
+                }
+            });
+        }
+
+        // Call createOrderAndInitializeCheckout immediately when the page is ready
+        createOrderAndInitializeCheckout();
+    });
+</script>
+
+{% endblock %}

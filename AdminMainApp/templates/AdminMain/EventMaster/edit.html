@@ -1,0 +1,187 @@
+{% extends 'AdminMain/Festival.html' %}
+{% block content %}
+
+<div class="col-12 grid-margin" >
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">EVENT MASTER</h4>
+                  <form class="form-sample" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <p class="card-description">
+                      &nbsp;
+                    </p>
+                      <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label">Event Name</label>
+                          <div class="col-sm-10">
+                            <input type="text" name="event_name" value="{{data.EventName}}" class="form-control" required/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                       <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Festival <br></label>
+                          <div class="col-sm-8">
+                            <select class="form-control" onchange="update_festival(this.value)" required style="color:black;">
+                              {% for i in FestivalMaster %}
+                              {% if i.id == data.FestivalId %}
+                              <option  value="{{ i.id }}" selected>{{i.festival_name}}</option>
+                              {% else %}
+                              <option  value="{{ i.id }}">{{i.festival_name}}</option>
+                              {% endif %}
+                              {% endfor %}
+                            </select>
+                            <input type="text" id="FestivalID" value="{{data.FestivalId}}" hidden name="festival_master_header_id">
+                          </div>
+                        </div>
+                       </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Event Category</label>
+                          <div class="col-sm-8">
+                            <select class="form-control" onchange="update_event(this.value)" required style="color:black;">
+                              {% for i in EventCategory %}
+                              {% if i.id == data.EventCategoyrId %}
+                              <option  value="{{ i.id }}" selected>{{i.event_category_name}}</option>
+                              {% else %}
+                              <option  value="{{ i.id }}" >{{i.event_category_name}}</option>
+                              {% endif %}
+                              {% endfor %}
+                            </select>
+                            <input type="text" id="EventID" value="{{data.EventCategoyrId}}" hidden name="event_category_id">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+<!--                      <div class="col-md-6">-->
+<!--                        <div class="form-group row">-->
+<!--                          <label class="col-sm-4 col-form-label">Event type</label>-->
+<!--                          <div class="col-sm-8">-->
+<!--                            <select id="CollegeID" class="form-control" name="event_type" style="color:black;" required>-->
+<!--                              <option value="">Select Event Type</option>-->
+<!--                              <option value="Offline" {% if data.EventType == "Offline" %} selected {% endif %}>Offline</option>-->
+<!--                              <option value="Online" {% if data.EventType == "Online" %} selected {% endif %}>Online</option>-->
+<!--                              <option value="Hybrid" {% if data.EventType == "Hybrid" %} selected {% endif %}>Hybrid</option>-->
+<!--                          </select>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Participant Category</label>
+                          <div class="col-sm-8">
+                            <select class="form-control"  onchange="update_participant(this.value)" required style="color:black;">
+                              {% for i in ParticipantCategory %}
+                              {% if i.id == data.ParticipantCategoryId %}
+                              <option  value="{{ i.id }}" selected>{{i.participant_category_name}}</option>
+                              {% else %}
+                              <option  value="{{ i.id }}">{{i.participant_category_name}}</option>
+                              {% endif %}
+                              {% endfor %}
+                            </select>
+                            <input type="text" id="ParticipantID"  value="{{data.ParticipantCategoryId}}" hidden name="participant_category_id">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Registration Fee</label>
+                          <div class="col-sm-8">
+                            <input type="number" name="registration_fee" value="{{data.Registration}}" step="0.01" max="50000" min="0" title="Please enter registration not less than Zero." class="form-control" required/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Event Document</label>
+                          <div class="col-sm-8">
+                            <input type="file" name="event_document" class="form-control" />
+                          </div>
+                        </div>
+                      </div>
+                       <div class="col-md-6">
+                            <div class="form-group row">
+                              <label class="col-sm-4 col-form-label">Abbreviation</label>
+                              <div class="col-sm-8">
+                                <input type="text" name="abbreviation" value="{{data.Abbreviation}}" class="form-control" maxlength="3" required/>
+                              </div>
+                            </div>
+                       </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Min Team Size</label>
+                          <div class="col-sm-8">
+                            <input type="number" name="min_team_size" value="{{data.MinTeamSize}}" min="1" max="30" class="form-control" required/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Max Team Size</label>
+                          <div class="col-sm-8">
+                            <input type="number" name="max_team_size" value="{{data.MaxTeamSize}}" class="form-control" min="1" max="40" required/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                      <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Video File</label>
+                          <div class="col-sm-8">
+                              <input type="file" name="video_file"  accept="video/*" class="form-control" />
+                          </div>
+                        </div>
+                      </div>
+                          <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-4 col-form-label">Max Registration</label>
+                          <div class="col-sm-8">
+                                <input type="number" name="max_registration" min="1" max="999" value="{{data.MaxRegistration}}" class="form-control"  required/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label">Event Description</label>
+                          <div class="col-sm-10">
+                            <textarea class="form-control" id="exampleTextarea1" name="event_description" rows="4" required>{{data.Description}}</textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                     <center><button type="submit" class="btn btn-primary mr-2">Submit</button>
+                       <button type="button" class="btn btn-light mr-2" onclick="ViewEventMaster()">Cancel</button></center>
+                  </form>
+                </div>
+              </div>
+</div>
+<script>
+
+function ViewEventMaster(){
+ window.location.href = "{% url 'ViewEventMaster' %}";
+}
+
+function update_festival(id) {
+        document.getElementById('FestivalID').value = id;
+}
+
+function update_event(id){
+        document.getElementById('EventID').value = id;
+}
+
+function update_participant(id) {
+        document.getElementById('ParticipantID').value = id;
+}
+</script>
+{% endblock %}

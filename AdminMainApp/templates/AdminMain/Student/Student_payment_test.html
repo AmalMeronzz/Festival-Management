@@ -1,0 +1,264 @@
+{% extends 'AdminMain/Student/index.html' %}
+{% block content %}
+
+<style>
+    body{
+    margin:0;
+display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh
+}
+
+ #loader-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.8); /* Adjust the background color and opacity as needed */
+        display: none;
+        z-index: 1000; /* Adjust the z-index value based on your layout */
+    }
+
+.spinner {
+        position: absolute;
+        width: 9px;
+        height: 9px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+.spinner div {
+  position: absolute;
+  width: 50%;
+  height: 150%;
+  background: #000000;
+  transform: rotate(calc(var(--rotation) * 1deg)) translate(0, calc(var(--translation) * 1%));
+  animation: spinner-fzua35 1s calc(var(--delay) * 1s) infinite ease;
+}
+
+.spinner div:nth-child(1) {
+  --delay: 0.1;
+  --rotation: 36;
+  --translation: 150;
+}
+
+.spinner div:nth-child(2) {
+  --delay: 0.2;
+  --rotation: 72;
+  --translation: 150;
+}
+
+.spinner div:nth-child(3) {
+  --delay: 0.3;
+  --rotation: 108;
+  --translation: 150;
+}
+
+.spinner div:nth-child(4) {
+  --delay: 0.4;
+  --rotation: 144;
+  --translation: 150;
+}
+
+.spinner div:nth-child(5) {
+  --delay: 0.5;
+  --rotation: 180;
+  --translation: 150;
+}
+
+.spinner div:nth-child(6) {
+  --delay: 0.6;
+  --rotation: 216;
+  --translation: 150;
+}
+
+.spinner div:nth-child(7) {
+  --delay: 0.7;
+  --rotation: 252;
+  --translation: 150;
+}
+
+.spinner div:nth-child(8) {
+  --delay: 0.8;
+  --rotation: 288;
+  --translation: 150;
+}
+
+.spinner div:nth-child(9) {
+  --delay: 0.9;
+  --rotation: 324;
+  --translation: 150;
+}
+
+.spinner div:nth-child(10) {
+  --delay: 1;
+  --rotation: 360;
+  --translation: 150;
+}
+
+@keyframes spinner-fzua35 {
+  0%, 10%, 20%, 30%, 50%, 60%, 70%, 80%, 90%, 100% {
+    transform: rotate(calc(var(--rotation) * 1deg)) translate(0, calc(var(--translation) * 1%));
+  }
+
+  50% {
+    transform: rotate(calc(var(--rotation) * 1deg)) translate(0, calc(var(--translation) * 1.5%));
+  }
+}
+</style>
+
+ <!-- Loader HTML code -->
+    <div id="loader-container" style="display: none;">
+        <div class="spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Function to create an order and initialize Razorpay Checkout
+        function createOrderAndInitializeCheckout() {
+            // Make a request to your Django server to create an order
+            $.ajax({
+                type: 'POST',
+                url: '/create_order/',  // Replace with your Django endpoint for creating an order
+                data: {'registration_fee': {{ registration_fee }}},
+                success: function (response) {
+                    // Check for errors in the response
+                    if (response.error) {
+                        alert('Error: ' + response.error);
+                    } else {
+                        // Initialize Razorpay Checkout
+                        var options = {
+                            key: response.razorpay_key_id,
+                            amount: response.amount,
+                            currency: 'INR',
+                            name: 'RCMAS COLLEGE',
+                            description: '',
+                            image: 'https://mcampus.rajagiricollege.edu.in/Content/sh/images/icon/logo.png',
+                            order_id: response.order_id,
+                            handler: function (response) {
+                                // Verify the payment on the server
+<!--                                alert(response.razorpay_payment_id);-->
+<!--                                alert(response.razorpay_order_id);-->
+<!--                                alert(response.razorpay_signature)-->
+                                verifyPayment(response);
+                            },
+                            prefill: {
+                            contact: '{{phone}}', // Set the contact field to an empty string
+                            email: '{{email}}'    // Set the email field to an empty string
+                           },
+
+                            notes: {
+                                address: 'Razorpay Corporate Office'
+                            },
+                            theme: {
+                                color: '#3399cc'
+                            }
+                        };
+
+                        var rzp1 = new Razorpay(options);
+                        rzp1.open();
+                    }
+                },
+                error: function (error) {
+                    alert('Error: Unable to create an order');
+                }
+            });
+        }
+
+
+function verifyPayment(response) {
+    // Get the CSRF token from the cookie
+
+    $('.spinner').show();
+    var csrfToken = getCookie('csrftoken');
+
+    // Make a request to your Django server to verify the payment
+    $.ajax({
+        type: 'POST',
+        url: '/verify_payment/',  // Replace with your Django endpoint for verifying payment
+        data: {
+            'payment_id': '{{ payment_id }}',
+            'razorpay_order_id':response.razorpay_order_id,
+            'razorpay_payment_id': response.razorpay_payment_id,
+            'razorpay_signature': response.razorpay_signature,
+        },
+        // Include the CSRF token in the headers
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrfToken);
+            }
+        },
+        success: function (verificationResponse) {
+            // Hide the loader after the AJAX call is complete
+            $('.spinner').hide();
+
+            // Handle the verification response as needed
+           if (verificationResponse.status === 'success') {
+            // Payment verification success, redirect to GeneratePaymentReceipt URL
+             alert('Payment verification status: ' + verificationResponse.status);
+
+            window.location.href = "{% url 'GeneratePaymentReceipt' %}";
+        } else {
+            // Payment verification failure, redirect to StudentHome URL
+            alert('Payment verification status: ' + verificationResponse.status);
+            window.location.href = "{% url 'StudentHome' %}";
+        }
+        },
+        error: function (error) {
+            // Handle error
+            // alert('Error: Unable to verify payment');
+            window.location.href = "{% url 'StudentHome' %}";
+        },
+<!--        complete: function () {-->
+<!--            // Redirect to GeneratePaymentReceipt URL after the Ajax call is complete-->
+<!--            window.location.href = "{% url 'GeneratePaymentReceipt' %}";-->
+<!--        }-->
+    });
+}
+
+// Function to get CSRF token from cookie
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Check if this cookie name is the one we're looking for
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Function to check if a method is safe for CSRF
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
+}
+
+// Call createOrderAndInitializeCheckout immediately when the page is ready
+createOrderAndInitializeCheckout();
+
+    });
+</script>
+{% endblock %}

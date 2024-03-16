@@ -1,0 +1,37 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Receipt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h2 {
+            color: #333;
+        }
+        p {
+            margin: 0 0 10px;
+        }
+        strong {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>Payment Receipt</h2>
+    <p><strong>Receipt Number:</strong> {{ receipt.id }}</p>
+    <p><strong>Payment Date:</strong> {{ receipt.created_on }}</p>
+    <p><strong>College Name:</strong> {{ college_name }}</p>
+    <p><strong>Event Chest No:</strong> {{ event_chest_no }}</p>
+    <p><strong>Participant Name:</strong> {{ participant_name }}</p>
+    <p><strong>Participant Phone:</strong> {{ participant_phone }}</p>
+    <p><strong>Event Name:</strong> {{ event_name }}</p>
+    <p><strong>Registration Fee:</strong> ${{ registration_fee }}</p>
+    <p><strong>Festival Name:</strong> {{ festival_name }}</p>
+    <p><strong>From Date:</strong> {{ from_date }}</p>
+    <p><strong>To Date:</strong> {{ to_date }}</p>
+    <p><strong>Event Start Date:</strong> {{ event_start_date }}</p>
+    <p><strong>Event End Date:</strong> {{ event_end_date }}</p>
+</body>
+</html>

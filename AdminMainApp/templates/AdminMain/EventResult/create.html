@@ -1,0 +1,459 @@
+{% extends 'AdminMain/Festival.html' %}
+{% block content %}
+<style>
+    #participantList {
+    display: none; /* Initially hide the dropdown */
+    position: absolute;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 999;
+    width: 100%;
+}
+</style>
+<div class="col-12 grid-margin" >
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Event Result</h4>
+                  <form class="form-sample" method="post">
+                    {% csrf_token %}
+                    <p class="card-description">
+                      &nbsp;
+                    </p>
+                    <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-group row">
+                              <label class="col-sm-4 col-form-label">Festival</label>
+                              <div class="col-sm-8">
+                                  <select id="festivalSelect" class="form-control"  onchange="update_festival(this.value)"required style="color:black;">
+                                      <option value="{{ data.FestivalId }}">Select Festival &nbsp;{{ data.Festival }}</option>
+                                      {% for festival_item in festival %}
+                                          <option value="{{ festival_item.id }}" style="color:black;">{{ festival_item.festival_name }}</option>
+                                      {% endfor %}
+                                      <option value="{{ data.FestivalId }}" >{{ data.Festival }}</option>
+                                  </select>
+                                  <input type="hidden" id="FestivalID" name="festival_master_header_id">
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group row">
+                              <label class="col-sm-4 col-form-label">Event Category</label>
+                              <div class="col-sm-8">
+                                  <select id="eventSelect" class="form-control" onchange="update_event_category(this.value)" required style="color:black;">
+                                      <option value="">Select Event </option>
+                                      <option value="{{data.EventCategoryId}}" selected>{{data.EventCategory}}</option>
+                                  </select>
+                                  <input type="hidden" id="EventCategoryID" name="event_category_id">
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+
+                      <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-group row">
+                              <label class="col-sm-4 col-form-label">Participant Category</label>
+                              <div class="col-sm-8">
+                                  <select id="participantSelect" class="form-control" onchange="update_participant_category(this.value)" required style="color:black;">
+                                      <option value="">Select Participant</option>
+                                      <option value="{{data.ParticipantCategoryId}}" selected>{{data.ParticipantCategory}}</option>
+                                  </select>
+                                  <input type="hidden" id="ParticipantCategoryID" name="participant_category_id">
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group row">
+                              <label class="col-sm-4 col-form-label">Event </label>
+                              <div class="col-sm-8">
+                                  <select id="EventMaster" class="form-control"onchange="update_event(this.value)" required style="color:black;">
+                                      <option value="">Select Event Master</option>
+                                      <option value="{{data.EventMasterId}}" selected>{{data.EventName}}</option>
+                                  </select>
+                                  <input type="hidden" id="EventMasterID" value="{{data.EventMasterId}}" name="event_master_id">
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                      <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-group row">
+                              <label class="col-sm-4 col-form-label">Winner Position</label>
+                              <div class="col-sm-8">
+                                  <select id="participantSelect" class="form-control" onchange="update_winner(this.value)" required style="color:black;">
+                                      <option value="">Select Winner position</option>
+                                      {% for i in WinnerPosition %}
+                                      <option value="{{i.id}}" >{{i.winner_position}}</option>
+                                      {% endfor %}
+                                  </select>
+                                  <input type="hidden" id="WinnerID" name="winner_position_id">
+                              </div>
+                          </div>
+                      </div>
+<!--                      <div class="col-md-6">-->
+<!--                            <div class="form-group row">-->
+<!--                                <label class="col-sm-4 col-form-label">Participant name</label>-->
+<!--                                <div class="col-sm-8">-->
+<!--                                    <input type="text" id="searchInput" class="form-control" placeholder="Search participant names" onkeyup="filterParticipants()" style="color: black;">-->
+<!--                                    <select id="ParticipantNames" class="form-control" required style="color:black;">-->
+<!--                                    </select>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                      </div>-->
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Chest Number</label>
+                                <div class="col-sm-8 ">
+                                    <input type="text" id="chestNumberInput" class="form-control" placeholder="chest number" oninput="ParticipantName()" style="color: black;" required>
+
+<!--                                    <input type="text" id=chestNumberInput"" class="form-control" placeholder="chest number" onchange="ParticipantName()" style="color: black;" required>-->
+<!--                                    <div id="ChestNumber" class="autocomplete-items"></div>-->
+<!--                                    <input type="text" id="selectchestnumber" name="participantId">-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                      <div class="row">
+<!--                          <div class="col-md-6">-->
+<!--                        <div class="form-group row">-->
+<!--                            <label class="col-sm-4 col-form-label">Participant name</label>-->
+<!--                            <div class="col-sm-8 autocomplete">-->
+<!--                                <input type="text" id="searchInput" class="form-control" placeholder="Search & Select Participant Name" onkeyup="filterParticipants()" style="color: black;" required>-->
+<!--                                <div id="participantList" class="autocomplete-items"></div>-->
+<!--                                <input type="hidden" id="selectedParticipantId" name="participantId">-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+                          <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Participant Name</label>
+                                <div class="col-sm-8 autocomplete">
+                                    <input type="text" id="EventParticipantName" name="participant_name" class="form-control"  style="color: black;" required >
+                                    <input type="hidden" id="EventParticipantHeaderId" class="form-control"  name="ParticipantHeaderId" style="color: black;" required readonly>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">College Name</label>
+                                <div class="col-sm-8 autocomplete">
+                                    <input type="text" id="CollegeName" name="college_name" class="form-control"  style="color: black;" required >
+                                </div>
+                            </div>
+                          </div>
+                      </div>
+                     <center><button type="submit" class="btn btn-primary mr-2">Submit</button>
+                         <button type="button" class="btn btn-light mr-2" onclick="ViewCommitte()">Cancel</button></center>
+                  </form>
+                </div>
+              </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+document.getElementById('chestNumberInput').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        // Prevent form submission on "Enter" key press in the chest number input field
+        event.preventDefault();
+    }
+});
+
+
+<!--function ParticipantName() {-->
+
+<!--    var eventMasterId = document.getElementById('EventMasterID').value;-->
+<!--    var chestNumberValue = document.getElementById('chestNumberInput').value;-->
+
+<!--   // AJAX call to fetch participant names based on the selected event&ndash;&gt;-->
+<!--        $.ajax({-->
+<!--            url: '/participant_name/',  // Replace with your URL for fetching participant names-->
+<!--            method: 'GET',-->
+<!--            data: { event_id: eventMasterId,chest_no:chestNumberValue },-->
+<!--            success: function(response) {-->
+<!--                console.log('Response from server:', response);-->
+
+<!--                var participantName = response.participant_name;-->
+<!--                var ParticipantHeaderId = response.participant_header_id-->
+
+<!--                // Set the value of the EventParticipantName text box-->
+<!--                document.getElementById('EventParticipantName').value = participantName;-->
+<!--                document.getElementById('EventParticipantHeaderId').value = ParticipantHeaderId;-->
+
+<!--            },-->
+<!--            error: function(error) {-->
+<!--                console.log(error);-->
+<!--            }-->
+<!--        });-->
+<!--}-->
+
+
+function ParticipantName() {
+    document.getElementById('EventParticipantName').value = '';
+    document.getElementById('EventParticipantHeaderId').value = '';
+
+    var eventMasterId = document.getElementById('EventMasterID').value;
+    var chestNumberValue = document.getElementById('chestNumberInput').value;
+
+    // AJAX call to fetch participant names based on the selected event
+    $.ajax({
+        url: '/participant_name/',  // Replace with your URL for fetching participant names
+        method: 'GET',
+        data: { event_id: eventMasterId, chest_no: chestNumberValue },
+        success: function(response) {
+            console.log('Response from server:', response);
+
+            if (response.participant_name !== null && response.participant_header_id !== null) {
+                // Participant details are valid, update the UI
+                var participantName = response.participant_name;
+                var ParticipantHeaderId = response.participant_header_id;
+                var college_name = response.college_name;
+
+                // Set the value of the EventParticipantName text box
+                document.getElementById('EventParticipantName').value = participantName;
+                document.getElementById('EventParticipantHeaderId').value = ParticipantHeaderId;
+                document.getElementById('CollegeName').value = college_name;
+            } else {
+
+                alert('Invalid chest number. Please enter a valid chest number.');
+            }
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+
+$(document).ready(function() {
+        $('#festivalSelect').change(function() {
+            var festivalId = $(this).val();
+
+            // AJAX call to fetch Event Categories based on selected Festival ID
+            $.ajax({
+                url: '/get_event_categories/',  // Replace with your URL for fetching event categories
+                method: 'GET',
+                data: { festival_id: festivalId },
+                success: function(response) {
+                 console.log('Response from server:', response);
+                    $('#eventSelect').empty(); // Clear previous options
+                    $('#eventSelect').append('<option value="">Select Event Category</option>');
+                    $.each(response, function(index, category) {
+                        $('#eventSelect').append('<option value="' + category.event_category_id + '">' + category.event_category_id__event_category_name + '</option>');
+                    });
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+
+        // Rest of your JavaScript for handling Event selection
+    });
+function ViewCommitte(){
+ window.location.href = "{% url 'ViewEventResult' %}";
+}
+
+
+function update_event_category(id){
+        document.getElementById('EventCategoryID').value = id;
+}
+
+function update_participant_category(id){
+        document.getElementById('ParticipantCategoryID').value = id;
+}
+
+
+function update_event(id){
+        document.getElementById('EventMasterID').value = id;
+}
+
+function update_festival(id){
+        document.getElementById('FestivalID').value = id;
+}
+
+function update_winner(id){
+        document.getElementById('WinnerID').value = id;
+}
+
+function update_prize(id){
+        document.getElementById('PrizeID').value = id;
+}
+
+$('#eventSelect').change(function() {
+            var EventCategoryId = $(this).val();
+
+            // AJAX call to fetch Event Categories based on selected Festival ID
+            $.ajax({
+                url: '/get_participant_categories/',  // Replace with your URL for fetching event categories
+                method: 'GET',
+                data: { festival_id: EventCategoryId },
+                success: function(response) {
+                 console.log('Response from server:', response);
+                    $('#participantSelect').empty(); // Clear previous options
+                    $('#participantSelect').append('<option value="">Select participant Category</option>');
+                    $.each(response, function(index, category) {
+                        $('#participantSelect').append('<option value="' + category.participant_category_id + '">' + category.participant_category_id__participant_category_name + '</option>');
+                    });
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+
+$('#participantSelect').change(function() {
+            var participantId = $(this).val();
+            var EventCategoryId = $("#eventSelect option:selected").val()||0;
+            var FestivalId = document.getElementById('FestivalID').value;
+
+            // AJAX call to fetch Event Categories based on selected Festival ID
+            $.ajax({
+                url: '/get_event_master_for_participant/',  // Replace with your URL for fetching event categories
+                method: 'GET',
+                data: { participant_id: participantId ,event_category_id:EventCategoryId,festival_id: FestivalId },
+                success: function(response) {
+                 console.log('Response from server:', response);
+                    $('#EventMaster').empty(); // Clear previous options
+                    $('#EventMaster').append('<option value="">Select Event</option>');
+                    $.each(response, function(index, category) {
+                        $('#EventMaster').append('<option value="' + category.id + '">' + category.event_name + '</option>');
+                    });
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+
+$('#EventMaster').change(function() {
+    var eventId = $(this).val();
+
+    // AJAX call to fetch participant names based on the selected event
+    $.ajax({
+        url: '/get_participant_names/',  // Replace with your URL for fetching participant names
+        method: 'GET',
+        data: { event_id: eventId },
+        success: function(response) {
+            console.log('Response from server:', response);
+            $('#ParticipantNames').empty(); // Clear previous options
+            $.each(response, function(index, participant) {
+                $('#ParticipantNames').append('<option value="' + participant.id + '">' + participant.participant_name + '</option>');
+            });
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+});
+
+<!--function filterParticipants() {-->
+<!--    var searchText = $('#searchInput').val().toLowerCase(); // Get the entered text and convert to lowercase for case-insensitive comparison-->
+<!--    $('#ParticipantNames option').each(function() {-->
+<!--        var participantName = $(this).text().toLowerCase(); // Get participant name from each option and convert to lowercase-->
+<!--        var option = $(this);-->
+
+<!--        // Check if the participant name contains the entered text, show/hide options accordingly-->
+<!--        if (participantName.indexOf(searchText) !== -1 || searchText === '') {-->
+<!--            option.show();-->
+<!--        } else {-->
+<!--            option.hide();-->
+<!--        }-->
+<!--    });-->
+<!--}-->
+
+// Event listener for keyup on searchInput to trigger filtering
+$('#searchInput').on('keyup', function() {
+    filterParticipants();
+});
+
+
+function filterParticipants() {
+    var input = document.getElementById('searchInput');
+    var filter = input.value.toLowerCase().trim();
+    var event_id = document.getElementById('EventMasterID').value;
+
+    // Call the backend to get the filtered participant names
+    fetch(`/get_participant_names?event_id=${event_id}&filter=${filter}`)
+        .then(response => response.json())
+        .then(data => {
+            var participantList = document.getElementById('participantList');
+            participantList.innerHTML = '';
+
+            // Filter data on the client side based on the input value
+            var filteredData = data.filter(participant => participant.participant_name.toLowerCase().includes(filter));
+
+            filteredData.forEach(participant => {
+                var option = document.createElement('div');
+                option.textContent = participant.participant_name;
+                option.addEventListener('click', function() {
+                    input.value = participant.participant_name;
+                    document.getElementById('selectedParticipantId').value = participant.id; // Set the selected participant ID
+                    participantList.innerHTML = ''; // Hide the autocomplete dropdown
+                });
+                participantList.appendChild(option);
+            });
+
+            // Show the dropdown after populating with filtered options
+            participantList.style.display = 'block';
+        })
+        .catch(error => console.error('Error:', error));
+
+     var input = document.getElementById('searchInput');
+    var isOptionSelected = false;
+
+    input.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            var selectedParticipantId = document.getElementById('selectedParticipantId').value;
+            if (!isOptionSelected && !selectedParticipantId) {
+                // If no participant is selected and no option is selected from the autocomplete
+                event.preventDefault();
+                // You can add your logic here, such as displaying an error message or highlighting the input field
+                console.log('Please select a participant.');
+            }
+        }
+    });
+
+    var participantList = document.getElementById('participantList');
+    participantList.addEventListener('click', function() {
+        isOptionSelected = true;
+    });
+
+    input.addEventListener('input', function() {
+        // Reset the flag when input changes to consider a new selection
+        isOptionSelected = false;
+    });
+}
+
+
+<!--function ParticipantName(){-->
+<!--  console.log('ParticipantName function called');-->
+<!--    var eventMasterId = document.getElementById('EventMasterID').value;-->
+<!--    var chestNumberValue = document.getElementById('chestNumberInput').value;-->
+
+<!--    // AJAX call to fetch participant names based on the selected event-->
+<!--    $.ajax({-->
+<!--        url: '/participant_name/',  // Replace with your URL for fetching participant names-->
+<!--        method: 'GET',-->
+<!--        data: { event_id: eventMasterId,chest_no:chestNumberValue },-->
+<!--        success: function(response) {-->
+<!--            console.log('Response from server:', response);-->
+
+<!--            var participantName = response.participant_name;-->
+
+<!--            // Set the value of the EventParticipantName text box-->
+<!--            document.getElementById('EventParticipantName').value = participantName;-->
+<!--        },-->
+<!--        error: function(error) {-->
+<!--            console.log(error);-->
+<!--        }-->
+<!--    });-->
+
+<!--}-->
+
+
+
+</script>
+
+{% endblock %}

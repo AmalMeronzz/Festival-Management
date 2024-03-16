@@ -1,0 +1,51 @@
+{% extends 'AdminMain/Festival.html' %}
+{% block content %}
+
+<div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Add Institution</h4>
+                  <a href="../CreateInstitution"><img src="https://cdn-icons-png.flaticon.com/512/1665/1665578.png" width="35vh;" height="35vh;"></a>
+
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Institution</th>
+
+                          <th>Address</th>
+
+                          <th>Phone no.</th>
+
+                          <th>Icon</th>
+
+                          <th>Banner</th>
+
+                          <th>Created date</th>
+
+                          <th></th>
+
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for i in data %}
+                        <tr>
+                          <td>{{i.institution_name}}</td>
+                          <td>{{i.institution_address}}</td>
+                          <td>{{i.institution_phone_no}}</td>
+                          <td><img src="media/{{i.institution_icon}}"></td>
+                          <td><img src="media/{{i.institution_banner}}"></td>
+                          <td>{{i.created_on}}</td>
+                          <td><a href="../EditInstitution/{{i.id}}"><label class="badge badge-primary">edit</label></a></td>
+                          <td><a href="../DeleteInstitution/{{i.id}}"><label class="badge badge-danger">delete</label></a></td>
+                          <td></td>
+                        </tr>
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+</div>
+{% endblock %}

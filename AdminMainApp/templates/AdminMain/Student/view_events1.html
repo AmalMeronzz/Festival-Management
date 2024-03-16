@@ -1,0 +1,262 @@
+{% load static %}
+<html class="no-js" lang="zxx">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>EventCon</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <link rel="manifest" href="site.webmanifest"> -->
+    <link rel="shortcut icon" type="image/x-icon" href="../static/student/img/favicon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="../static/student/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/student/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../static/student/css/magnific-popup.css">
+    <link rel="stylesheet" href="../static/student/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../static/student/css/themify-icons.css">
+    <link rel="stylesheet" href="../static/student/css/gijgo.css">
+    <link rel="stylesheet" href="../static/student/css/nice-select.css">
+    <link rel="stylesheet" href="../static/student/css/animate.css">
+    <link rel="stylesheet" href="../static/student/css/flaticon.css">
+    <link rel="stylesheet" href="../static/student/css/slicknav.css">
+
+    <link rel="stylesheet" href="../static/student/css/style.css">
+    <!-- <link rel="stylesheet" href="css/responsive.css"> -->
+    <style>
+    .single_brand {
+        margin-right: 20px; /* Adjust this value as needed for the desired space */
+    }
+</style>
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
+
+    <!-- header-start -->
+    <header>
+        <div class="header-area ">
+            <div id="sticky-header" class="main-header-area">
+                <div class="container">
+                    <div class="header_bottom_border">
+                        <div class="row align-items-center">
+                            <div class="col-xl-3 col-lg-3">
+                                <div class="logo">
+                                    <a href="../StudentHome">
+                                        <img src="../static/student/img/gallery/aplicationlogo.png" height="55vh;" width="180vh;" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6">
+                                <div class="main-menu  d-none d-lg-block">
+                                    <nav>
+                                        <ul id="navigation">
+<!--                                            <li><a href="../StudentHome">home</a></li>-->
+<!--                                            <li><a href="../Student/StudentRegistration">registration</a></li>-->
+<!--                                            <li><a href="../login">login</a></li>-->
+<!--                                            <li><a href="#">pages <i class="ti-angle-down"></i></a>-->
+<!--                                                <ul class="submenu">-->
+<!--                                                    <li><a href="about.html">about</a></li>-->
+<!--                                                    <li><a href="Program.html">Program</a></li>-->
+<!--                                                    <li><a href="Venue.html">Venue</a></li>-->
+<!--                                                    <li><a href="elements.html">elements</a></li>-->
+<!--                                                </ul>-->
+<!--                                            </li>-->
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mobile_menu d-block d-lg-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- header-end -->
+
+<div class="performar_area black_bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section_title mb-80">
+                        <br>
+                        <h3 class="wow fadeInRight" data-wow-duration="1s" data-wow-delay=".3s">Events </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="row">
+                       {% for i in data %}
+                        <div class="col-lg-6 col-md-6 col-6">
+                            <div  class="single_performer wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s">
+                                <div data-tilt class="thumb">
+                                    <img src="/media/{{i.EventDocument}}" class="fullscreen-image" height="400vh" alt="">
+                                </div>
+                                <div class="performer_heading">
+                                    <h4>{{i.EventName}}</h4>
+                                    <p>Registration Fee&nbsp;: {{ i.RegistrationFee }}</p>
+                                    <p>Start Date&nbsp;&nbsp;&nbsp;&nbsp;: {{i.EventStartDate}}</p>
+                                    <p>End Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{i.EventEndDate}}</p>
+<!--                                    <p>Total Registration : {{i.ParticipantCount}}</p>-->
+                                    <a href="../StudentRegisterEvent/{{i.id}}" class="genric-btn primary">Register</a>
+<!--                                    <span>Start Date:{{i.festival_master_header_id__from_date}}</span><br>-->
+<!--                                    <span>End DAte:{{i.festival_master_header_id__to_date}}</span><br>-->
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+ </div>
+
+
+   <!-- brand_area_start  -->
+    <div class="brand_area black_bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section_title text-center mb-80">
+                        <h4 class="wow fadeInRight" data-wow-duration="1s" data-wow-delay=".3s">Sponsors</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="brand_wrap">
+                        <div class="brand_active owl-carousel">
+                             {% for i in sponsor %}
+                            <div class="single_brand text-center">
+                                <center>
+                                <img src="/media/{{ i.sponsor_logo }}" style="width: 150px; height: 120px;" alt=""><br>
+                                <h3 style="color:white;">{{ i.sponsor_name }}</h3>
+                                    </center>
+                            </div>
+                           {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- brand_area_end  -->
+
+    <!-- footer_start  -->
+    <footer class="footer">
+        <div class="footer_top">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="footer_widget">
+                            <div class="address_details text-center">
+<!--                                <p class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".5s">The event regularly attracts a diverse range of attendees from around the world.</p>-->
+<!--                                <a href="#" class="boxed-btn3 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".6s">Buy Ticket</a>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copy-right_text">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <p class="copy_right text-center wow fadeInDown" data-wow-duration="1s" data-wow-delay=".5s">
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- footer_end  -->
+
+    <!-- JS here -->
+    <script src="../static/student/js/vendor/modernizr-3.5.0.min.js"></script>
+    <script src="../static/student/js/vendor/jquery-1.12.4.min.js"></script>
+    <script src="../static/student/js/popper.min.js"></script>
+    <script src="../static/student/js/bootstrap.min.js"></script>
+    <script src="../static/student/js/owl.carousel.min.js"></script>
+    <script src="../static/student/js/isotope.pkgd.min.js"></script>
+    <script src="../static/student/js/ajax-form.js"></script>
+    <script src="../static/student/js/waypoints.min.js"></script>
+    <script src="../static/student/js/jquery.counterup.min.js"></script>
+    <script src="../static/student/js/imagesloaded.pkgd.min.js"></script>
+    <script src="../static/student/js/scrollIt.js"></script>
+    <script src="../static/student/js/jquery.scrollUp.min.js"></script>
+    <script src="../static/student/js/wow.min.js"></script>
+    <script src="../static/student/js/gijgo.min.js"></script>
+    <script src="../static/student/js/nice-select.min.js"></script>
+    <script src="../static/student/js/jquery.slicknav.min.js"></script>
+    <script src="../static/student/js/jquery.magnific-popup.min.js"></script>
+    <script src="../static/student/js/tilt.jquery.js"></script>
+    <script src="../static/student/js/plugins.js"></script>
+
+
+
+    <!--contact js-->
+    <script src="../static/student/js/contact.js"></script>
+    <script src="../static/student/js/jquery.ajaxchimp.min.js"></script>
+    <script src="../static/student/js/jquery.form.js"></script>
+    <script src="../static/student/js/jquery.validate.min.js"></script>
+    <script src="../static/student/js/mail-script.js"></script>
+
+
+    <script src="../static/student/js/main.js"></script>
+
+    <script src="../static/student/js/wow.min.js"></script>
+    <script>
+        new WOW().init();
+    </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var fullscreenImages = document.querySelectorAll('.fullscreen-image');
+
+    fullscreenImages.forEach(function(image) {
+        image.addEventListener('click', function() {
+            toggleFullScreen(image);
+        });
+    });
+
+    function toggleFullScreen(element) {
+        if (!document.fullscreenElement) {
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.mozRequestFullScreen) { /* Firefox */
+                element.mozRequestFullScreen();
+            } else if (element.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                element.webkitRequestFullscreen();
+            } else if (element.msRequestFullscreen) { /* IE/Edge */
+                element.msRequestFullscreen();
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) { /* Firefox */
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE/Edge */
+                document.msExitFullscreen();
+            }
+        }
+    }
+});
+</script>
+
+</body>
+
+</html>

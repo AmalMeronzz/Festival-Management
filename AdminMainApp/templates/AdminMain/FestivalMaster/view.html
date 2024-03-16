@@ -1,0 +1,64 @@
+{% extends 'AdminMain/Festival.html' %}
+{% block content %}
+
+<div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Add Festival</h4>
+                  <a href="../CreateFestivalMaster"><img src="https://cdn-icons-png.flaticon.com/512/1665/1665578.png" width="35vh;" height="35vh;"></a>
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Sl.No<br> &nbsp;</th>
+
+                          <th>Festival Name <br>&nbsp;</th>
+
+                          <th>Festival Icon<br>&nbsp;</th>
+
+                          <th>Festival Banner<br>&nbsp;</th>
+
+                          <th>Registration <br>Start date</th>
+
+                          <th>Registration <br>End date</th>
+
+                          <th>Festival<br>Start Date</th>
+
+                          <th>Festival<br>End date</th>
+
+                          <th>Video <br>&nbsp;</th>
+
+                          <th></th>
+
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for i in data %}
+                        <tr>
+                          <td style="text-align:right;">{{ forloop.counter }}</td>
+                          <td>{{i.festival_master_header_id__festival_name}}</td>
+                          <td><img src="media/{{i.festival_master_header_id__festival_icon}}"></td>
+                          <td><img src="media/{{i.festival_master_header_id__festival_banner}}"></td>
+                          <td>{{i.registration_start_date}}</td>
+                          <td>{{i.registration_end_date}}</td>
+                          <td>{{i.festival_master_header_id__from_date}}</td>
+                          <td>{{i.festival_master_header_id__to_date}}</td>
+                          <td>
+                             <video width="200" height="150" controls>
+                                    <source src="media/{{ i.festival_master_header_id__video_file }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                             </video>
+                          </td>
+                          <td><a href="../EditFestivalMaster/{{i.festival_master_header_id__id}}"><label class="badge badge-primary">Edit</label></a></td>
+                          <td><a href="../DeleteFestivalMaster/{{i.festival_master_header_id__id}}"><label class="badge badge-danger">Delete</label></a></td>
+                          <td></td>
+                        </tr>
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+</div>
+{% endblock %}

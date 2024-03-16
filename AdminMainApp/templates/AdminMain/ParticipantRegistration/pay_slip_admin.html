@@ -1,0 +1,341 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Payment Receipt</title>
+</head>
+<body>
+    <style>
+        .maindiv {
+            margin-top: 2em;
+            margin-left:3em;
+            margin-right:3em;
+        }
+
+        table tbody tr td {
+            color: #000;
+            font-family: Calibri;
+            font-weight: 600;
+            border-color: #000 !important;
+        }
+
+        table thead tr th {
+            border-color: #000 !important;
+        }
+
+        .logo-semes img {
+            width: 600px;
+            height: 150px;
+        }
+
+        .std-dp {
+            margin: 0 auto;
+            width: 130px;
+            height: fit-content;
+        }
+
+            .std-dp img {
+                width: 100%;
+            }
+
+        .name-withpic {
+            float: right;
+            text-align: center;
+            width: 215px;
+            margin-top: 2em;
+        }
+
+            .name-withpic span.name {
+                width: 100%;
+                float: left;
+                text-align: center;
+            }
+
+                .name-withpic span.name p {
+                    margin: 0;
+                    font-family: sans-serif;
+                    font-size: 15px;
+                }
+
+                    .name-withpic span.name p.date {
+                        font-size: 13px;
+                    }
+
+        table tbody tr td h2.hd-h2 {
+            font-size: 20px;
+        }
+
+        table tbody tr td span {
+            font-size: 18px;
+        }
+
+        tr.candidate-detail td table tbody tr td {
+            font-size: 15px;
+        }
+
+        table.maintable tbody tr td {
+            border: 1px solid #9c9c9c;
+            padding: 8px 4px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: Calibri;
+        }
+
+        table.maintable thead tr th {
+            border: 1px solid #9c9c9c;
+            padding: 8px 10px;
+            text-align: center;
+        }
+
+        table.maintable tbody tr td.sujectname {
+            text-align: left;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+            table.for-setgrade tbody tr td {
+                border: 1px solid;
+                padding: 2px 6px;
+                font-size: 13px;
+                font-weight: 600;
+                font-family: Calibri;
+            }
+
+        .signarea {
+            height: 90px;
+        }
+
+        .nofound {
+            font-size: 4em;
+            font-family: sans-serif;
+        }
+
+        @@media print {
+            table {
+                border-collapse: collapse;
+                border-spacing: 0;
+            }
+
+            .logo-semes img {
+                width: 450px;
+                height: 110px;
+            }
+
+            table tbody tr td h2.hd-h2 {
+                font-size: 10px;
+            }
+
+            table tbody tr td span {
+                font-size: 10px;
+            }
+
+            .name-withpic span.name p {
+                font-size: 10px;
+            }
+
+                .name-withpic span.name p.date {
+                    font-size: 8px;
+                }
+
+            tr.candidate-detail td table tbody tr td {
+                font-size: 9px;
+            }
+
+            table.maintable tbody tr td {
+                font-size: 8px;
+            }
+
+            table.maintable thead tr th {
+                font-size: 7px;
+                color: #000;
+            }
+
+            table.maintable tbody tr td.sujectname {
+                text-align: left;
+            }
+
+            table.for-nb tbody tr td {
+                font-size: 9px;
+            }
+
+            table tbody tr td.tite {
+                font-size: 9px;
+            }
+
+            table.for-setgrade tbody tr td {
+                font-size: 8px;
+            }
+
+            .signarea {
+                height: 30px;
+            }
+
+            .maindiv {
+                margin-top: 0em;
+            }
+
+            .std-dp {
+                margin: 0 auto;
+                width: 130px;
+                height: fit-content;
+            }
+
+            .name-withpic {
+                float: right;
+                text-align: center;
+                width: 215px;
+                margin-top: 1em;
+            }
+
+            .nofound {
+                font-size: 2em;
+                font-family: sans-serif;
+            }
+        }
+
+        table.detailedTbl tbody tr td {
+            border: 1px solid;
+            padding: 13px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: Calibri;
+        }
+
+        table.detailedTbl th {
+            border: 1px solid;
+            padding: 13px;
+        }
+
+        body {
+            font-family: calibri;
+        }
+
+         @media print {
+        .download-button {
+            display: none;
+        }
+        }
+    </style>
+
+
+        <div class="maindiv" id="pdf-content">
+            <div class="logo-semes" style="text-align: center; height: auto; margin: 0;">
+                <img src="../static/student/img/gallery/aplicationlogo.jpg" />
+            </div>
+            <div style="/*margin-top:1em;*/width: 100%;float: left;">
+                <br />
+
+                    <center> <h3>Fee Receipt</h3></center>
+
+                <table>
+                    <tr>
+                        <th style="text-align: left; width: 230px;">
+                            Name&nbsp; &nbsp; &nbsp; &nbsp;  &nbsp;&nbsp;  &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;:
+                        </th>
+                        <td>
+                             &nbsp;&nbsp;{{ participant_name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left; width: 230px;">
+                            Phone&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;:
+                        </th>
+                        <td>
+                             &nbsp;&nbsp;{{ participant_phone }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left; width: 230px;">
+                            College&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;:
+                        </th>
+                        <td>
+                             &nbsp;&nbsp;{{ college_name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left; width: 230px;">
+                           Registration Date&nbsp; &nbsp;:
+                        </th>
+                        <td>
+                             &nbsp;&nbsp;{{ receipt.created_on }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left; width: 230px;">
+                          Chest Number&nbsp; &nbsp; &nbsp; &nbsp; :
+                        </th>
+                        <td>
+                             &nbsp;&nbsp;{{ Chest_number }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="text-align:left">
+                            Program&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;:
+                        </th>
+                        <td>
+                             &nbsp;&nbsp;{{ festival_name }}
+                        </td>
+                    </tr>
+
+                </table>
+                <br />
+                <table border="1" class="detailedTbl" style="width:100%" cellspacing="10" height="20">
+                    <tr height="30">
+                        <th width="10%" style="text-align: center">Sl. No.</th>
+                        <th width="30%" style="text-align: left">Event</th>
+                        <th width="20%" style="text-align: right">Amount (Rs.)</th>
+
+                    </tr>
+
+                        <tr height="30">
+                            <td style="text-align:center">
+                                1
+                            </td>
+                            <td style="text-align: left">
+                                 {{ event_name }}
+                                    <br />
+
+                            </td>
+
+                            <td style="text-align:right;">
+                                {{ registration_fee }}
+                            </td>
+                        </tr>
+
+                </table>
+                <br />
+                <center>
+                <div class="col-md-12" >
+                <input type="button" value="Download" id="download-button" style="color:white; background-color:#991212;">
+                     <input type="button" value="Back" id="redirectButton" style="color:white; background-color:blue;">
+                </div>
+                    </center>
+            </div>
+        </div>
+</body>
+
+<!-- Add this in the head section of your HTML -->
+<script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+
+<script>
+ document.getElementById("redirectButton").onclick = function() {
+    window.location.href = "{% url 'ViewParticipantRegistration' %}";
+}
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Function to download HTML content as PDF
+        function downloadAsPDF() {
+            const element = document.getElementById("pdf-content"); // Change 'pdf-content' to the id of the div containing your content
+            html2pdf(element);
+        }
+
+        // Attach the function to the button click event
+        document.getElementById("download-button").addEventListener("click", downloadAsPDF);
+    });
+</script>
+
+
+</html>
